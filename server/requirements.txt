@@ -1,0 +1,6 @@
+pip install virtualenv
+python -m venv myenv
+virtualenv myenv
+source myenv/bin/activate
+pip install Flask
+pip install flask-pymongo
