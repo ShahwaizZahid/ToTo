@@ -4,3 +4,8 @@ virtualenv myenv
 source myenv/bin/activate
 pip install Flask
 pip install flask-pymongo
+python -m pip install "pymongo[srv]"
+export FLASK_APP=main
+export FLASK_ENV=development
+export FLASK_DEBUG=1=1
+flask run

@@ -1,6 +1,21 @@
+
+# For virual environment
 pip install virtualenv
 python3 -m venv myenv
 virtualenv myenv
+
+# For activate virtual environment
 source myenv/bin/activate
+
+# For flask
 pip install Flask
 pip install flask-pymongo
+
+# For mongo drivers
+python -m pip install "pymongo[srv]"
+
+# For run debug server
+export FLASK_APP=main
+export FLASK_ENV=development
+export FLASK_DEBUG=1=1
+flask run
