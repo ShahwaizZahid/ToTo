@@ -11,11 +11,14 @@ source myenv/bin/activate
 pip install Flask
 pip install flask-pymongo
 
+#for env
+pip install python-dotenv
+
 # For mongo drivers
 python -m pip install "pymongo[srv]"
 
 # For run debug server
 export FLASK_APP=main
 export FLASK_ENV=development
-export FLASK_DEBUG=1=1
+export FLASK_DEBUG=1
 flask run
