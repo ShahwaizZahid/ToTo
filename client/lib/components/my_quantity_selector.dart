@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 
 class MyQuantitySelector extends StatelessWidget {
   final int quantity;
-  final Food food;
+  final String cartId;
   final VoidCallback onIncrement;
   final VoidCallback onDecrement;
   const MyQuantitySelector(
       {super.key,
       required this.quantity,
-      required this.food,
+      required this.cartId,
       required this.onIncrement,
       required this.onDecrement});
 
