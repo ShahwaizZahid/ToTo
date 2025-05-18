@@ -1,4 +1,5 @@
 class Food {
+  final String id;
   final String name;
   final String description;
   final String imagePath;
@@ -7,6 +8,7 @@ class Food {
   List<Addon> availableAddons;
 
   Food({
+    required this.id,
     required this.name,
     required this.description,
     required this.imagePath,
@@ -17,6 +19,7 @@ class Food {
 
   factory Food.fromJson(Map<String, dynamic> json) {
     return Food(
+      id: json['_id'] as String,
       name: json['name'] as String,
       description: json['description'] as String,
       imagePath: json['imagePath'] as String,
@@ -33,6 +36,7 @@ class Food {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'name': name,
       'description': description,
       'imagePath': imagePath,

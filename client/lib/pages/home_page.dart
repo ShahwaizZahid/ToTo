@@ -5,10 +5,8 @@ import 'package:client/components/my_food_tile.dart';
 import 'package:client/components/my_silver_app_bar.dart';
 import 'package:client/components/my_tab_bar.dart';
 import 'package:client/models/food.dart';
-import 'package:client/models/restaurant.dart';
 import 'package:client/pages/food_page.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -40,9 +38,7 @@ class _HomePageState extends State<HomePage>
 
       if (response.statusCode == 200) {
         List<dynamic> menuJson = jsonDecode(response.body);
-        print('Menu fetched from API:');
         print(menuJson);
-
         // Parse JSON into List<Food>
         List<Food> loadedMenu = menuJson.map((jsonItem) => Food.fromJson(jsonItem)).toList();
 
@@ -51,13 +47,11 @@ class _HomePageState extends State<HomePage>
           _isLoading = false;
         });
       } else {
-        print('Failed to load menu, status code: ${response.statusCode}');
         setState(() {
           _isLoading = false;
         });
       }
     } catch (e) {
-      print('Error fetching menu: $e');
       setState(() {
         _isLoading = false;
       });

@@ -52,7 +52,8 @@ class _LoginPageState extends State<LoginPage> {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('loggedIn', true);
         await prefs.setString('email', data['email']);
-
+        await prefs.setString('UserId', data['userId']);
+        
         // Navigate to home page
         Future.delayed(Duration(seconds: 1), () {
           Navigator.pushAndRemoveUntil(
