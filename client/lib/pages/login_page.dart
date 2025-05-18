@@ -1,11 +1,11 @@
 import 'package:client/components/my_button.dart';
 import 'package:client/components/my_textfield.dart';
 import 'package:client/pages/home_page.dart';
+import 'package:client/pages/register_page.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
-  final void Function()? onTap;
-  LoginPage({super.key, required this.onTap});
+  LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -73,7 +73,11 @@ class _LoginPageState extends State<LoginPage> {
                   width: 4,
                 ),
                 GestureDetector(
-                  onTap: widget.onTap,
+                  onTap: (){Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) =>
+                          RegisterPage(), // dummy onTap if not needed
+                      ));},
                   child: Text(
                     'Register now',
                     style: TextStyle(

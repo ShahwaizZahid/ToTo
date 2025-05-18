@@ -1,5 +1,5 @@
-import 'package:client/auth/login_or_register.dart';
 import 'package:client/models/restaurant.dart';
+import 'package:client/pages/register_page.dart';
 import 'package:client/themes/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: Provider.of<ThemeProvider>(context).themeData,
-      home: const LoginOrRegister(),
+      home: const RegisterPage(),
     );
   }
 }

@@ -1,12 +1,13 @@
-import 'package:flutter/cupertino.dart';
+import 'package:client/pages/login_page.dart';
 import 'package:flutter/material.dart';
-
 import '../components/my_button.dart';
 import '../components/my_textfield.dart';
 
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 class RegisterPage extends StatefulWidget {
-  final void Function()? onTap;
-  const RegisterPage({super.key, required this.onTap});
+  const RegisterPage({super.key});
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -16,6 +17,53 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController emailcontroller = TextEditingController();
   final TextEditingController passwordcontroller = TextEditingController();
   final TextEditingController confirmcontroller = TextEditingController();
+  Future<void> registerUser() async {
+    final email = emailcontroller.text.trim();
+    final password = passwordcontroller.text.trim();
+    final confirmPassword = confirmcontroller.text.trim();
+
+    if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+      showMessage('Please fill all fields');
+      return;
+    }
+
+    if (password != confirmPassword) {
+      showMessage('Passwords do not match');
+      return;
+    }
+
+    final url = Uri.parse('http://10.0.2.2:5001/signup');
+
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email, 'password': password}),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 201) {
+        showMessage(data['message'] ?? 'Signup successful');
+        Future.delayed(Duration(seconds: 1), () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) =>
+                LoginPage(), // dummy onTap if not needed
+          ));
+        });
+      } else {
+        showMessage(data['message'] ?? 'Signup failed');
+      }
+    } catch (e) {
+      showMessage('Error: $e');
+    }
+  }
+
+  void showMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,8 +109,8 @@ class _RegisterPageState extends State<RegisterPage> {
               obscureText: true,
             ),
             SizedBox(height: 10),
-            //  Signun Button
-            MyButton(onTap: () {}, text: 'Sign up'),
+            //  Register Button
+            MyButton(onTap: registerUser, text: 'Register'),
             SizedBox(height: 25),
             // Already have an account
             Row(
@@ -77,7 +125,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   width: 4,
                 ),
                 GestureDetector(
-                  onTap: widget.onTap,
+                  onTap: (){Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) =>
+                          LoginPage(), // dummy onTap if not needed
+                      ));},
                   child: Text(
                     'Login now',
                     style: TextStyle(
