@@ -8,12 +8,11 @@ from pymongo.errors import ServerSelectionTimeoutError
 def signup():
     data = request.get_json()
     print(data)
-    username = data.get('username')
     email = data.get('email')
     password = data.get('password')
 
     # Check if all fields are provided
-    if not username or not email or not password:
+    if  not email or not password:
         return jsonify({"status": "failure", "message": "All fields (username, email, password) are required."}), 400
 
     # Validate email format
@@ -26,7 +25,7 @@ def signup():
         return jsonify({"status": "failure", "message": "Email already exists."}), 409  # Conflict
 
     # Insert the new user into the database
-    document = {"username": username, "email": email, "password": password}  # Note: Password should be hashed
+    document = {"email": email, "password": password}  # Note: Password should be hashed
 
     try:
         collection.insert_one(document)
