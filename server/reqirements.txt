@@ -14,6 +14,10 @@ pip install flask-pymongo
 # For cors
 pip install flask_cors
 
+# For image upload
+pip install cloudinary
+
+
 # For env
 pip install python-dotenv
 
