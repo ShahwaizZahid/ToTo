@@ -1,0 +1,290 @@
+[
+  {
+    "name": "Cheeseburger Deluxe",
+    "description": "A premium cheeseburger with double beef patties, cheddar cheese, and fresh toppings.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747557035/dbgey4ueioxxb4zixiqh.jpg",
+    "price": 6.99,
+    "availableAddons": [
+      { "name": "Double Cheese", "price": 1.25 },
+      { "name": "Bacon", "price": 1.75 },
+      { "name": "Pickles", "price": 0.75 },
+      { "name": "Extra Patty", "price": 2.0 }
+    ],
+    "category": "burgers"
+  },
+  {
+    "name": "Spicy Patti Burger",
+    "description": "A hot and spicy patti burger with jalapenos and tangy hot sauce.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747557244/ghiswwyaug1k2tyv3kdz.jpg",
+    "price": 5.49,
+    "availableAddons": [
+      { "name": "Extra Hot Sauce", "price": 0.75 },
+      { "name": "Grilled Onions", "price": 0.75 },
+      { "name": "Avocado", "price": 1.5 },
+      { "name": "Cheddar Cheese", "price": 1.0 }
+    ],
+    "category": "burgers"
+  },
+  {
+    "name": "Sunny Side Egg Burger",
+    "description": "A juicy beef burger topped with a sunny-side-up egg and fresh veggies.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747557331/oebg325uz4hapvnen7xj.jpgegg_burger.jpeg",
+    "price": 4.99,
+    "availableAddons": [
+      { "name": "Extra Egg", "price": 1.5 },
+      { "name": "Avocado", "price": 1.5 },
+      { "name": "Cheddar Cheese", "price": 1.0 },
+      { "name": "Grilled Mushrooms", "price": 1.0 }
+    ],
+    "category": "burgers"
+  },
+  {
+    "name": "Ultimate Zinger Burger",
+    "description": "A crispy chicken zinger burger with fresh lettuce and spicy mayo.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747557384/kcnx3bxl6kgz6xyuaiqd.jpg",
+    "price": 6.49,
+    "availableAddons": [
+      { "name": "Extra Crispy Chicken", "price": 2.0 },
+      { "name": "Pepper Jack Cheese", "price": 1.0 },
+      { "name": "Spicy Mayo", "price": 0.75 },
+      { "name": "Onion Rings", "price": 1.25 }
+    ],
+    "category": "burgers"
+  },
+  {
+    "name": "Fully Loaded Burger",
+    "description": "A massive burger loaded with bacon, cheese, and caramelized onions.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747557423/sh6fofltaxrfccgv4wug.jpg",
+    "price": 7.49,
+    "availableAddons": [
+      { "name": "Extra Bacon", "price": 1.75 },
+      { "name": "Cheddar Cheese", "price": 1.25 },
+      { "name": "BBQ Sauce", "price": 1.0 },
+      { "name": "Fried Egg", "price": 1.5 }
+    ],
+    "category": "burgers"
+  },
+
+  {
+    "name": "Caesar Salad",
+    "description": "Crisp romaine lettuce tossed with Caesar dressing, croutons, and parmesan cheese.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747557483/vzebhgooc7nbpuszvqga.jpg",
+    "price": 7.99,
+    "availableAddons": [
+      { "name": "Grilled Chicken", "price": 2.0 },
+      { "name": "Bacon Bits", "price": 1.0 },
+      { "name": "Extra Dressing", "price": 0.5 }
+    ],
+    "category": "salads"
+  },
+  {
+    "name": "Caprese Salad",
+    "description": "Fresh mozzarella, tomatoes, and basil drizzled with balsamic glaze.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747557525/mn50a0ncidr5va7qo7v9.jpg",
+    "price": 8.49,
+    "availableAddons": [
+      { "name": "Balsamic Reduction", "price": 0.75 },
+      { "name": "Avocado", "price": 1.25 }
+    ],
+    "category": "salads"
+  },
+  {
+    "name": "Cobb Salad",
+    "description": "A classic Cobb salad with chicken, bacon, avocado, hard-boiled eggs, and blue cheese.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747557563/vmibrg9dyetu73zunauf.jpg",
+    "price": 9.49,
+    "availableAddons": [
+      { "name": "Extra Chicken", "price": 2.0 },
+      { "name": "Extra Cheese", "price": 0.75 }
+    ],
+    "category": "salads"
+  },
+  {
+    "name": "Greek Salad",
+    "description": "A refreshing Greek salad with cucumbers, tomatoes, olives, and feta cheese.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747557594/fd3spzppyw6bd6wbb8gl.jpg",
+    "price": 8.99,
+    "availableAddons": [
+      { "name": "Extra Feta", "price": 1.0 },
+      { "name": "Tzatziki Sauce", "price": 0.5 }
+    ],
+    "category": "salads"
+  },
+  {
+    "name": "Waldorf Salad",
+    "description": "A delicious Waldorf salad made with apples, walnuts, and grapes in a creamy dressing.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747557689/xba2s6080dmyofnubkv0.jpg",
+    "price": 7.49,
+    "availableAddons": [
+      { "name": "Extra Walnuts", "price": 0.75 },
+      { "name": "Dried Cranberries", "price": 0.5 }
+    ],
+    "category": "salads"
+  },
+
+  {
+    "name": "Cheesecake",
+    "description": "A rich and creamy cheesecake with a buttery graham cracker crust.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747557745/hcc2esdmwgumnkccoljd.jpg",
+    "price": 4.99,
+    "availableAddons": [
+      { "name": "Strawberry Sauce", "price": 0.75 },
+      { "name": "Whipped Cream", "price": 0.5 }
+    ],
+    "category": "desserts"
+  },
+  {
+    "name": "Tiramisu",
+    "description": "A classic Italian dessert made with layers of coffee-soaked ladyfingers and mascarpone cheese.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747557779/ytyn11gsmhdsv3yy47fc.jpg",
+    "price": 5.49,
+    "availableAddons": [
+      { "name": "Extra Cocoa Powder", "price": 0.5 },
+      { "name": "Chocolate Shavings", "price": 0.75 }
+    ],
+    "category": "desserts"
+  },
+  {
+    "name": "Brownie",
+    "description": "A fudgy brownie topped with chocolate ganache and served warm.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747557825/gauhbj7yhrxpy1fxhybc.jpg",
+    "price": 3.99,
+    "availableAddons": [
+      { "name": "Vanilla Ice Cream", "price": 1.5 },
+      { "name": "Chocolate Sauce", "price": 0.5 }
+    ],
+    "category": "desserts"
+  },
+  {
+    "name": "Panna Cotta",
+    "description": "A creamy Italian dessert made with sweetened cream thickened with gelatin and served with berry coulis.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747557852/srij9ziybpgnfsjrtdij.jpg",
+    "price": 4.49,
+    "availableAddons": [
+      { "name": "Berry Compote", "price": 0.75 },
+      { "name": "Mint Leaves", "price": 0.5 }
+    ],
+    "category": "desserts"
+  },
+  {
+    "name": "Éclair",
+    "description": "A light and airy pastry filled with cream and topped with chocolate glaze.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747557888/khpdzvrhctrexqovwnfu.jpg",
+    "price": 3.49,
+    "availableAddons": [
+      { "name": "Extra Cream Filling", "price": 0.75 },
+      { "name": "Sprinkles", "price": 0.25 }
+    ],
+    "category": "desserts"
+  },
+  {
+    "name": "Lemonade",
+    "description": "Freshly squeezed lemonade with a hint of mint.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747557918/oaiomwpzbcfgnihvzuuw.jpg",
+    "price": 2.99,
+    "availableAddons": [
+      { "name": "Extra Lemon", "price": 0.5 },
+      { "name": "Mint Leaves", "price": 0.25 }
+    ],
+    "category": "drinks"
+  },
+  {
+    "name": "Iced Tea",
+    "description": "Refreshing iced tea served with lemon and a hint of sweetness.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747557962/nnvxeamoijes2vxongab.jpg",
+    "price": 2.49,
+    "availableAddons": [
+      { "name": "Peach Flavor", "price": 0.75 },
+      { "name": "Extra Ice", "price": 0.25 }
+    ],
+    "category": "drinks"
+  },
+  {
+    "name": "Mojito",
+    "description": "A classic mojito with fresh mint, lime, and rum (non-alcoholic available).",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747557990/rvexb4ftz2kjciojxerv.jpg",
+    "price": 4.99,
+    "availableAddons": [
+      { "name": "Extra Mint", "price": 0.5 },
+      { "name": "Lime Wedge", "price": 0.25 }
+    ],
+    "category": "drinks"
+  },
+  {
+    "name": "Smoothie",
+    "description": "A blend of fresh fruits and yogurt for a refreshing drink.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747558032/c5jzbrxqe24ddvvfhwuk.jpg",
+    "price": 3.99,
+    "availableAddons": [
+      { "name": "Protein Powder", "price": 1.0 },
+      { "name": "Chia Seeds", "price": 0.5 }
+    ],
+    "category": "drinks"
+  },
+  {
+    "name": "Espresso",
+    "description": "A strong and bold shot of espresso made from premium coffee beans.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747558061/trnmnwec2mq5ifvppt9n.jpg",
+    "price": 2.49,
+    "availableAddons": [
+      { "name": "Sugar", "price": 0.25 },
+      { "name": "Cream", "price": 0.5 }
+    ],
+    "category": "drinks"
+  },
+  {
+    "name": "Lemonade",
+    "description": "Freshly squeezed lemonade with a hint of mint.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747558082/qqf1c7xtb0epkvcxbe1e.jpg",
+    "price": 2.99,
+    "availableAddons": [
+      { "name": "Extra Lemon", "price": 0.5 },
+      { "name": "Mint Leaves", "price": 0.25 }
+    ],
+    "category": "drinks"
+  },
+  {
+    "name": "Iced Tea",
+    "description": "Refreshing iced tea served with lemon and a hint of sweetness.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747558109/ronug2k9uztuwzcr38zl.jpg",
+    "price": 2.49,
+    "availableAddons": [
+      { "name": "Peach Flavor", "price": 0.75 },
+      { "name": "Extra Ice", "price": 0.25 }
+    ],
+    "category": "drinks"
+  },
+  {
+    "name": "Mojito",
+    "description": "A classic mojito with fresh mint, lime, and rum (non-alcoholic available).",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747558143/ncn8ith6r1uspzydxk2e.jpg",
+    "price": 4.99,
+    "availableAddons": [
+      { "name": "Extra Mint", "price": 0.5 },
+      { "name": "Lime Wedge", "price": 0.25 }
+    ],
+    "category": "drinks"
+  },
+  {
+    "name": "Smoothie",
+    "description": "A blend of fresh fruits and yogurt for a refreshing drink.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747558169/zqo21dvbr6vbqzc1udui.jpg",
+    "price": 3.99,
+    "availableAddons": [
+      { "name": "Protein Powder", "price": 1.0 },
+      { "name": "Chia Seeds", "price": 0.5 }
+    ],
+    "category": "drinks"
+  },
+  {
+    "name": "Espresso",
+    "description": "A strong and bold shot of espresso made from premium coffee beans.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747558203/zsuttrkzerhwas6hpmw5.jpg",
+    "price": 2.49,
+    "availableAddons": [
+      { "name": "Sugar", "price": 0.25 },
+      { "name": "Cream", "price": 0.5 }
+    ],
+    "category": "drinks"
+  }
+]
