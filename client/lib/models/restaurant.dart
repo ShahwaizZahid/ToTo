@@ -10,42 +10,41 @@ class Restaurant extends ChangeNotifier {
 
   //   G E T T E R S
   List<Food> get menu => _menu;
-  List<CardItem> get cart => _card;
+  List get cart => _card;
 
   // O P E R A T I O N S
-  final List<CardItem> _card = [];
+  final List _card = [];
 
   // Add to cart
-  void addToCard(Food food, List<Addon> selectedAddons) {
+  void addToCard(Food food, List selectedAddons) {
     // Check if the food with the same addons already exists in the cart
 
-    CardItem? cardItem = _card.firstWhereOrNull((item) {
-      bool isSameFood = item.food == food;
-      bool isAddons = ListEquality().equals(
-        item.selectedAddons,
-        selectedAddons,
-      );
-      return isSameFood && isAddons;
-    });
-    print(cardItem);
-    if (cardItem != null) {
-      cardItem.quantity++;
-    } else {
-      _card.add(CardItem(food: food, selectedAddons: selectedAddons));
-    }
-    print(_card.length);
+    //  cardItem = _card.firstWhereOrNull((item) {
+    //   bool isSameFood = item.food == food;
+    //   bool isAddons = ListEquality().equals(
+    //     item.selectedAddons,
+    //     selectedAddons,
+    //   );
+    //   return isSameFood && isAddons;
+    // });
+    // if (cardItem != null) {
+      // cardItem.quantity++;
+    // } else {
+      // _card.add(CardItem(food: food, selectedAddons: selectedAddons));
+    // }
+    // print(_card.length);
     notifyListeners();
   }
 
   //   Remove From  Card
-  void removeFromCard(CardItem cardItem) {
+  void removeFromCard( cardItem) {
     int cardIndex = _card.indexOf(cardItem);
     if (cardIndex != -1) {
-      if (_card[cardIndex].quantity > 1) {
-        _card[cardIndex].quantity--;
-      } else {
-        _card.removeAt(cardIndex);
-      }
+      // if (_card[cardIndex].quantity > 1) {
+      //   // _card[cardIndex].quantity--;
+      // } else {
+      //   _card.removeAt(cardIndex);
+      // }
     }
     notifyListeners();
   }
@@ -54,15 +53,15 @@ class Restaurant extends ChangeNotifier {
 
   double getTotalPrice() {
     double total = 0.0;
-    for (CardItem cartItem in _card) {
-      double itemTotal = cartItem.food.price;
+    // for (cartItem in _card) {
+    //   double itemTotal = cartItem.food.price;
+    //
+    //   for (addon in cartItem.selectedAddons) {
+    //     itemTotal += addon.price;
+    //   }
 
-      for (Addon addon in cartItem.selectedAddons) {
-        itemTotal += addon.price;
-      }
-
-      total += itemTotal * cartItem.quantity;
-    }
+      // total += itemTotal * cartItem.quantity;
+    // }
 
     return total;
   }
@@ -71,9 +70,9 @@ class Restaurant extends ChangeNotifier {
   int getTotalItemCount() {
     int totalItemCount = 0;
 
-    for (CardItem cartItem in _card) {
-      totalItemCount += cartItem.quantity;
-    }
+    // for (cartItem in _card) {
+    //   // totalItemCount += cartItem.quantity;
+    // }
     return totalItemCount;
   }
 
@@ -98,9 +97,9 @@ class Restaurant extends ChangeNotifier {
     receipt.writeln("----------------");
 
     for (final cartIten in _card) {
-      receipt.writeln(
-        " ${cartIten.quantity} x ${cartIten.food.name} - ${_formatPrice(cartIten.food.price)}",
-      );
+      // receipt.writeln(
+      //   " ${cartIten.quantity} x ${cartIten.food.name} - ${_formatPrice(cartIten.food.price)}",
+      // );
       if (cartIten.selectedAddons.isNotEmpty) {
         receipt.writeln(
           "     Add-ons: ${_formatAddons(cartIten.selectedAddons)} ",
@@ -122,7 +121,7 @@ class Restaurant extends ChangeNotifier {
   }
 
   // Format a list of addons into a string summary
-  String _formatAddons(List<Addon> addons) {
+  String _formatAddons(List addons) {
     return addons
         .map((addon) => '${addon.name} (${_formatPrice(addon.price)})')
         .join(', ');
