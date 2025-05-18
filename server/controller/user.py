@@ -1,8 +1,7 @@
 from services.user import is_valid_email
-from flask import Flask, jsonify, request
+from flask import  jsonify, request
 from config.db import user_collection as collection
 from pymongo.errors import ServerSelectionTimeoutError
-from werkzeug.security import check_password_hash 
 
 
 def signup():
