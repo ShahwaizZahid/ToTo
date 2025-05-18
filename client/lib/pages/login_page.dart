@@ -3,6 +3,10 @@ import 'package:client/components/my_textfield.dart';
 import 'package:client/pages/home_page.dart';
 import 'package:client/pages/register_page.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({super.key});
@@ -12,13 +16,63 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController emailcontroller = TextEditingController();
-  final TextEditingController passwordcontroller = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   void login(){
 
     Navigator.push(context, MaterialPageRoute(builder: (context)=>  const HomePage()));
   }
+
+
+  Future<void> loginUser() async {
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      showMessage('Please fill in all fields');
+      return;
+    }
+
+    final url = Uri.parse('http://10.0.2.2:5001/login');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email, 'password': password}),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 201 && data['status'] == 'success') {
+        showMessage(data['message']);
+
+        // Save login state
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('loggedIn', true);
+        await prefs.setString('email', data['email']);
+
+        // Navigate to home page
+        Future.delayed(Duration(seconds: 1), () {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()),
+                (Route<dynamic> route) => false, // this removes all previous routes
+          );
+        });
+      } else {
+        showMessage(data['message']);
+      }
+    } catch (e) {
+      showMessage('Login failed: $e');
+    }
+  }
+
+  void showMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,20 +99,20 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 25),
             // Email TextField
             MyTextField(
-              controller: emailcontroller,
+              controller: emailController,
               hintText: 'Email',
               obscureText: false,
             ),
             SizedBox(height: 10),
             // Password TextField
             MyTextField(
-              controller: passwordcontroller,
+              controller: passwordController,
               hintText: 'Password',
               obscureText: true,
             ),
             SizedBox(height: 10),
             //  Signin Button
-            MyButton(onTap: login, text: 'Sign In'),
+            MyButton(onTap: loginUser, text: 'Sign In'),
             SizedBox(height: 25),
             //Not have an account
             Row(

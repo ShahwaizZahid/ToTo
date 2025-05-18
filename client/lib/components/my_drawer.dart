@@ -1,4 +1,5 @@
 import 'package:client/components/my_drawer_tile.dart';
+import 'package:client/pages/login_page.dart';
 import 'package:client/pages/setting_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,13 @@ class MyDrawer extends StatelessWidget {
                             builder: (context) => const SettingPage()))
                   }),
           const Spacer(),
-          MyDrawerTile(text: 'L O G O U T ', icon: Icons.logout, onTap: () {}),
+          MyDrawerTile(text: 'L O G O U T ', icon: Icons.logout, onTap: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage()),
+                  (Route<dynamic> route) => false, // this removes all previous routes
+            );
+          }),
           const SizedBox(height: 25)
         ],
       ),
