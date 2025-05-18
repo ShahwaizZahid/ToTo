@@ -8,7 +8,6 @@ app = Flask(__name__)
 CORS(app)
 app.register_blueprint(auth_routes) 
 app.register_blueprint(menu_routes)
-
 check_mongo_connection() 
 print (" Pyhton Server is running successfully")
 

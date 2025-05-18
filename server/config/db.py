@@ -15,8 +15,10 @@ uri = f"mongodb+srv://{username}:{password}@{cluster}/?retryWrites=true&w=majori
 
 client = MongoClient(uri)
 db = client[db_name]
+
 user_collection = db['users']
 restaurant_collection = db['RestaurantList']
+add_cart_items = db['add_cart_items']
 
 def check_mongo_connection():
     try:
