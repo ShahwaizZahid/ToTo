@@ -11,7 +11,10 @@ class SettingPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-          title: Text("Setting"),
+          title: Text("Setting",
+              style: TextStyle(
+              color: Theme.of(context).colorScheme.inversePrimary,
+      ),),
           centerTitle: true,
           backgroundColor: Theme.of(context).colorScheme.background),
       body: Column(
