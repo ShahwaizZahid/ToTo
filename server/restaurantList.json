@@ -28,7 +28,7 @@
   {
     "name": "Sunny Side Egg Burger",
     "description": "A juicy beef burger topped with a sunny-side-up egg and fresh veggies.",
-    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747557331/oebg325uz4hapvnen7xj.jpgegg_burger.jpeg",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747563498/fsn2a9xjeemiagrc9txn.jpg",
     "price": 4.99,
     "availableAddons": [
       { "name": "Extra Egg", "price": 1.5 },
@@ -232,59 +232,60 @@
     ],
     "category": "drinks"
   },
+
   {
-    "name": "Lemonade",
-    "description": "Freshly squeezed lemonade with a hint of mint.",
-    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747558082/qqf1c7xtb0epkvcxbe1e.jpg",
+    "name": "Garlic Bread",
+    "description": "Toasted bread topped with garlic butter and parsley.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747563214/saxdglwxmt8zdzxkbebn.jpg",
+    "price": 3.49,
+    "availableAddons": [
+      { "name": "Cheese", "price": 0.75 },
+      { "name": "Extra Garlic", "price": 0.5 }
+    ],
+    "category": "sides"
+  },
+  {
+    "name": "Mashed Potatoes",
+    "description": "Creamy mashed potatoes whipped to perfection.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747563238/zmb1qmdeurxoidx8l0j9.jpg",
+    "price": 4.29,
+    "availableAddons": [
+      { "name": "Gravy", "price": 0.75 },
+      { "name": "Butter", "price": 0.5 }
+    ],
+    "category": "sides"
+  },
+  {
+    "name": "Coleslaw",
+    "description": "Crunchy cabbage and carrot salad tossed in a creamy dressing.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747563256/rmd0bisvwdtlhfbe0znu.jpg",
     "price": 2.99,
     "availableAddons": [
-      { "name": "Extra Lemon", "price": 0.5 },
-      { "name": "Mint Leaves", "price": 0.25 }
+      { "name": "Extra Dressing", "price": 0.5 },
+      { "name": "Sunflower Seeds", "price": 0.75 }
     ],
-    "category": "drinks"
+    "category": "sides"
   },
   {
-    "name": "Iced Tea",
-    "description": "Refreshing iced tea served with lemon and a hint of sweetness.",
-    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747558109/ronug2k9uztuwzcr38zl.jpg",
-    "price": 2.49,
-    "availableAddons": [
-      { "name": "Peach Flavor", "price": 0.75 },
-      { "name": "Extra Ice", "price": 0.25 }
-    ],
-    "category": "drinks"
-  },
-  {
-    "name": "Mojito",
-    "description": "A classic mojito with fresh mint, lime, and rum (non-alcoholic available).",
-    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747558143/ncn8ith6r1uspzydxk2e.jpg",
+    "name": "Roasted Vegetables",
+    "description": "A medley of seasonal vegetables roasted to perfection.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747563272/ppb1mn8tu59ia1tsqcrl.jpg",
     "price": 4.99,
     "availableAddons": [
-      { "name": "Extra Mint", "price": 0.5 },
-      { "name": "Lime Wedge", "price": 0.25 }
+      { "name": "Balsamic Glaze", "price": 0.75 },
+      { "name": "Herbs", "price": 0.5 }
     ],
-    "category": "drinks"
+    "category": "sides"
   },
   {
-    "name": "Smoothie",
-    "description": "A blend of fresh fruits and yogurt for a refreshing drink.",
-    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747558169/zqo21dvbr6vbqzc1udui.jpg",
-    "price": 3.99,
+    "name": "French Fries",
+    "description": "Crispy golden fries seasoned to perfection.",
+    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747563291/yg25xunyeluwufuog1do.jpg",
+    "price": 3.49,
     "availableAddons": [
-      { "name": "Protein Powder", "price": 1.0 },
-      { "name": "Chia Seeds", "price": 0.5 }
+      { "name": "Cheese Sauce", "price": 1.0 },
+      { "name": "Spicy Ketchup", "price": 0.5 }
     ],
-    "category": "drinks"
-  },
-  {
-    "name": "Espresso",
-    "description": "A strong and bold shot of espresso made from premium coffee beans.",
-    "imagePath": "https://res.cloudinary.com/di2b6b4wd/image/upload/v1747558203/zsuttrkzerhwas6hpmw5.jpg",
-    "price": 2.49,
-    "availableAddons": [
-      { "name": "Sugar", "price": 0.25 },
-      { "name": "Cream", "price": 0.5 }
-    ],
-    "category": "drinks"
+    "category": "sides"
   }
 ]

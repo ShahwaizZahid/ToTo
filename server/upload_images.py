@@ -26,4 +26,4 @@ def upload_image_to_cloudinary(image_path):
         return None
     
 
-upload_image_to_cloudinary('assets/images/burgers/cheese_burger.jpeg')
+upload_image_to_cloudinary('assets/images/burgers/egg_burger.jpeg')
