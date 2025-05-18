@@ -34,29 +34,26 @@ def signup():
         return jsonify({"status": "failure", "message": "Failed to insert.", "error": str(e)}), 500
 
 
+from bson.objectid import ObjectId  # make sure you have this imported
+
 def login():
     data = request.get_json()
     email = data.get('email')
     password = data.get('password')
 
-    # Check if fields are present
     if not email or not password:
         return jsonify({"status": "failure", "message": "Email and password are required."}), 400
 
-    # Check if user exists
     user = collection.find_one({"email": email})
     if not user:
-        print(user)
         return jsonify({"status": "failure", "message": "Invalid email or password."}), 401
 
-    # If password is plain text (not secure, just for demo)
     if user['password'] != password:
-        print(user['password'], password)
-        return jsonify({"status": "failure", "message": "Invalid  password."}), 401
+        return jsonify({"status": "failure", "message": "Invalid password."}), 401
 
-    # ✅ Login successful
     return jsonify({
         "status": "success",
         "message": "Login successful",
         "email": email,
+        "userId": str(user["_id"])  # convert ObjectId to string for JSON
     }), 201
