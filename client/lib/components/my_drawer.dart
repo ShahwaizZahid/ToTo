@@ -3,6 +3,7 @@ import 'package:client/pages/login_page.dart';
 import 'package:client/pages/setting_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
@@ -42,12 +43,17 @@ class MyDrawer extends StatelessWidget {
                             builder: (context) => const SettingPage()))
                   }),
           const Spacer(),
-          MyDrawerTile(text: 'L O G O U T ', icon: Icons.logout, onTap: () {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => LoginPage()),
-                  (Route<dynamic> route) => false, // this removes all previous routes
-            );
+          MyDrawerTile(
+              text: 'L O G O U T ',
+              icon: Icons.logout,
+              onTap: () async {
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setBool('loggedIn', false);
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+                    (Route<dynamic> route) => false, // this removes all previous routes
+              );
           }),
           const SizedBox(height: 25)
         ],
