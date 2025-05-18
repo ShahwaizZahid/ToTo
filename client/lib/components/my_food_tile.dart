@@ -42,11 +42,17 @@ class MyFoodTile extends StatelessWidget {
                 SizedBox(
                   width: 15,
                 ),
-                ClipRRect(
-                  borderRadius:
-                      BorderRadius.circular(8.0), // Specify the radius value
-                  child: Image.asset(food.imagePath, height: 120),
-                )
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: SizedBox(
+              width: 100,
+              height: 120,
+              child: Image.network(
+                food.imagePath,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) =>
+                    Icon(Icons.broken_image, size: 100),
+              )))
               ],
             ),
           ),

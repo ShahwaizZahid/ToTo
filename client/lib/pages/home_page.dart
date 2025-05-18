@@ -9,6 +9,8 @@ import 'package:client/models/restaurant.dart';
 import 'package:client/pages/food_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,12 +22,48 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  List<Food> _fetchedMenu = [];
+  bool _isLoading = true;  // optional to show loading indicator
+
   @override
   void initState() {
     super.initState();
     _tabController =
         TabController(length: FoodCategory.values.length, vsync: this);
+    fetchMenuFromApi();
   }
+
+
+  void fetchMenuFromApi() async {
+    try {
+      final response = await http.get(Uri.parse('http://10.0.2.2:5001/menu_list'));
+
+      if (response.statusCode == 200) {
+        List<dynamic> menuJson = jsonDecode(response.body);
+        print('Menu fetched from API:');
+        print(menuJson);
+
+        // Parse JSON into List<Food>
+        List<Food> loadedMenu = menuJson.map((jsonItem) => Food.fromJson(jsonItem)).toList();
+
+        setState(() {
+          _fetchedMenu = loadedMenu;
+          _isLoading = false;
+        });
+      } else {
+        print('Failed to load menu, status code: ${response.statusCode}');
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      print('Error fetching menu: $e');
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
 
   @override
   void dispose() {
@@ -70,7 +108,6 @@ class _HomePageState extends State<HomePage>
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Divider(
-
                           indent: 25,
                           endIndent: 25,
                           color: Theme.of(context).colorScheme.secondary
@@ -81,10 +118,12 @@ class _HomePageState extends State<HomePage>
                   ),
                 ),
               ],
-          body: Consumer<Restaurant>(
-              builder: (context, restaurant, child) => TabBarView(
-                  controller: _tabController,
-                  children: getFoodInThisCategory(restaurant.menu)))),
+          body: _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : TabBarView(
+            controller: _tabController,
+            children: getFoodInThisCategory(_fetchedMenu),
+          ),),
     );
   }
 }
