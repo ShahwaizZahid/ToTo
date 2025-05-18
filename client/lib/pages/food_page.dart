@@ -50,17 +50,18 @@ class _FoodPageState extends State<FoodPage> {
           'addons': addons,
         }),
       );
+      final resBody = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Added to cart successfully!')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(resBody['message'] ?? 'Added to cart')),
+        );
         Future.delayed(Duration(seconds: 1), () {
           Navigator.pop(context);
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to add to cart: ${response.body}')),
+          SnackBar(content: Text(resBody['error'] ?? 'Failed to add to cart')),
         );
       }
     } catch (e) {
