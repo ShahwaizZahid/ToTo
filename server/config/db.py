@@ -54,5 +54,5 @@ def insert_menu_from_file(json_file_path):
         return None
     
 
-insert_menu_from_file('../restaurantList.json')
+# insert_menu_from_file('../restaurantList.json')
 

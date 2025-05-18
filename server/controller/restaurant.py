@@ -1,5 +1,6 @@
-from flask import Blueprint, jsonify,request
+from flask import  jsonify,request
 from config.db import restaurant_collection, add_cart_items
+from bson import ObjectId
 
 
 
@@ -53,3 +54,47 @@ def add_to_cart():
     except Exception as e:
         print('Error:', e)
         return jsonify({'error': 'Failed to add item to cart'}), 500
+    
+
+def get_cart_items():
+    try:
+        user_id = request.args.get('userId')
+        if not user_id:
+            return jsonify({'error': 'Missing userId'}), 400
+
+        items_cursor = add_cart_items.find({'userId': user_id})
+        cart_items = []
+
+        for item in items_cursor:
+            food_item = restaurant_collection.find_one({'_id': ObjectId(item['foodId'])})
+            if not food_item:
+                continue
+
+            selected_addon_names = item.get('addons', [])  # list of selected addon names
+
+            # Filter only the selected addons with name and price
+            selected_addons = [
+                {
+                    'name': addon['name'],
+                    'price': addon['price']
+                }
+                for addon in food_item.get('availableAddons', [])
+                if addon['name'] in selected_addon_names
+            ]
+
+            cart_items.append({
+                'cartItemId': str(item['_id']),
+                'imagePath': food_item.get('imagePath', ''),
+                'name': food_item.get('name', ''),
+                'price': food_item.get('price', 0),
+                'count': item.get('count', 1),
+                'addons': selected_addons,
+            })
+        print(cart_items)
+        return jsonify(cart_items), 200
+
+    except Exception as e:
+        print('Error:', e)
+        return jsonify({'error': 'Failed to fetch cart items'}), 500
+
+
