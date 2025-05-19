@@ -4,6 +4,9 @@ from bson import ObjectId
 
 
 
+# ----------------------------
+#    Get All menu
+# ----------------------------
 def get_menu():
     menu_items_cursor = restaurant_collection.find({})
     menu_items = []
@@ -15,6 +18,9 @@ def get_menu():
     return jsonify(menu_items), 200
 
 
+# ----------------------------
+#    Add item in Cart
+# ----------------------------
 def add_to_cart():
     data = request.json
 
@@ -56,6 +62,9 @@ def add_to_cart():
         return jsonify({'error': 'Failed to add item to cart'}), 500
     
 
+# ----------------------------
+#    Get Cart Items
+# ----------------------------
 def get_cart_items():
     try:
         user_id = request.args.get('userId')
@@ -90,11 +99,48 @@ def get_cart_items():
                 'count': item.get('count', 1),
                 'addons': selected_addons,
             })
-        print(cart_items)
+        
         return jsonify(cart_items), 200
 
     except Exception as e:
         print('Error:', e)
         return jsonify({'error': 'Failed to fetch cart items'}), 500
 
+
+# ----------------------------
+#    Update counter in cart
+# ----------------------------
+def update_cart_count():
+    data = request.json
+    cart_id = data.get('cart_id')
+    method = data.get('method')  # 'increment' or 'decrement'
+
+    if not cart_id or method not in ['increment', 'decrement']:
+        return jsonify({"error": "Invalid input"}), 400
+
+    try:
+        cart_obj_id = ObjectId(cart_id)   # <-- convert string to ObjectId
+    except Exception:
+        return jsonify({"error": "Invalid cart_id"}), 400
+
+    # Now query by ObjectId
+    item = add_cart_items.find_one({"_id": cart_obj_id})
+    if not item:
+        return jsonify({"error": "Cart item not found"}), 404
+
+    current_count = item.get('count', 1)
+
+    if method == 'increment':
+        new_count = current_count + 1
+        add_cart_items.update_one({"_id": cart_obj_id}, {"$set": {"count": new_count}})
+        return jsonify({"message": "Count incremented", "count": new_count}), 200
+
+    elif method == 'decrement':
+        new_count = current_count - 1
+        if new_count < 1:
+            add_cart_items.delete_one({"_id": cart_obj_id})
+            return jsonify({"message": "Item removed from cart"}), 200
+        else:
+            add_cart_items.update_one({"_id": cart_obj_id}, {"$set": {"count": new_count}})
+            return jsonify({"message": "Count decremented", "count": new_count}), 200
 
