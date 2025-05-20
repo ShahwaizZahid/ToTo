@@ -176,12 +176,17 @@ class _CartPageState extends State<CartPage> {
                 ),
               ),
               MyButton(
-                  onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PaymentPage(),
-                        ),
-                      ),
+                  onTap: () =>
+                  {
+                    if(userCart.isNotEmpty){
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PaymentPage(),
+                    ),
+                  )}else{
+                      showMessage('First add items in cart for checkout')
+                    }},
                   text: 'Go to checkout'),
               const SizedBox(height: 20)
             ],
