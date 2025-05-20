@@ -17,7 +17,7 @@ class DeliveryProgessPage extends StatefulWidget {
 
 class _DeliveryProgessPageState extends State<DeliveryProgessPage> {
   List userCart = [];
-  bool isLoading = false;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -25,11 +25,8 @@ class _DeliveryProgessPageState extends State<DeliveryProgessPage> {
     fetchCartItems().then((items) {
       setState(() {
         userCart = items;
+        isLoading = false;
       });
-
-      // ✅ Print userCart after it has been updated
-      print("📦 User Cart after setting state:");
-      print(userCart);
     });
   }
 
@@ -84,7 +81,7 @@ class _DeliveryProgessPageState extends State<DeliveryProgessPage> {
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Center(
-          child: MyReceipt(Restaurant().generateReceipt(userCart)),
+          child: isLoading ? Center(child: CircularProgressIndicator()): MyReceipt(Restaurant().generateReceipt(userCart)),
         ),
       ),
     );
