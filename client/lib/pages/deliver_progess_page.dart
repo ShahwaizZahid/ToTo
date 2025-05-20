@@ -1,9 +1,74 @@
+import 'dart:convert';
+
 import 'package:client/components/my_receipt.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
-class DeliveryProgessPage extends StatelessWidget {
+class DeliveryProgessPage extends StatefulWidget {
   const DeliveryProgessPage({super.key});
+
+  @override
+  State<DeliveryProgessPage> createState() => _DeliveryProgessPageState();
+}
+
+class _DeliveryProgessPageState extends State<DeliveryProgessPage> {
+  List userCart = [];
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCartItems().then((items) {
+      setState(() {
+        userCart = items;
+      });
+
+      // ✅ Print userCart after it has been updated
+      print("📦 User Cart after setting state:");
+      print(userCart);
+    });
+  }
+
+
+  Future<List<dynamic>> fetchCartItems() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('UserId');
+    if (userId == null) {
+      print("user not");
+      return [];
+    }
+
+    try {
+      setState(() {
+        isLoading= true;
+      });
+      final response = await http.get(
+        Uri.parse('http://10.0.2.2:5001/get_cart_items?userId=$userId'),
+      );
+
+      if (response.statusCode == 200) {
+
+        final List<dynamic> cartItems = jsonDecode(response.body); // ✅ directly parse as List
+        print("ad");
+        return cartItems;
+      } else {
+        print('Failed to load cart items. Status code: ${response.statusCode}');
+      }
+      setState(() {
+        isLoading= false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading= false;
+      });
+      print('Error loading cart items: $e');
+    }
+
+    return [];
+  }
+
 
   @override
   Widget build(BuildContext context) {
