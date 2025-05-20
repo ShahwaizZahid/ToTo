@@ -23,7 +23,6 @@ def get_menu():
 # ----------------------------
 def add_to_cart():
     data = request.json
-
     try:
         user_id = data['userId']
         food_id = data['foodId']
@@ -144,3 +143,15 @@ def update_cart_count():
             add_cart_items.update_one({"_id": cart_obj_id}, {"$set": {"count": new_count}})
             return jsonify({"message": "Count decremented", "count": new_count}), 200
 
+
+# ----------------------------
+#    Clear user cart
+# ----------------------------
+def clear_cart():
+    user_id = request.args.get('userId')
+    if not user_id:
+        return jsonify({'error': 'Missing userId parameter'}), 400
+
+    result = add_cart_items.delete_many({'userId': user_id})
+
+    return jsonify({'message': 'Cart clear successfully'})

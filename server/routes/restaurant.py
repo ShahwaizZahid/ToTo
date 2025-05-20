@@ -1,5 +1,9 @@
 from flask import Blueprint
-from controller.restaurant import add_to_cart, get_menu,get_cart_items, update_cart_count
+from controller.restaurant import add_to_cart, get_menu,get_cart_items, update_cart_count, clear_cart
+from flask import  jsonify,request
+from config.db import  add_cart_items
+from bson import ObjectId
+
 
 
 menu_routes = Blueprint('menu_routes', __name__)
@@ -24,3 +28,8 @@ def get_cart_items_route():
 def update_cart_count_route():
     return update_cart_count()
     
+
+
+@menu_routes.route('/clear_cart', methods=['POST'])
+def clear_cart_route():
+     return clear_cart()
