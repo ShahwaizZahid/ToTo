@@ -15,39 +15,7 @@ class Restaurant extends ChangeNotifier {
   // O P E R A T I O N S
   final List _card = [];
 
-  // Add to cart
-  void addToCard(Food food, List selectedAddons) {
-    // Check if the food with the same addons already exists in the cart
 
-    //  cardItem = _card.firstWhereOrNull((item) {
-    //   bool isSameFood = item.food == food;
-    //   bool isAddons = ListEquality().equals(
-    //     item.selectedAddons,
-    //     selectedAddons,
-    //   );
-    //   return isSameFood && isAddons;
-    // });
-    // if (cardItem != null) {
-      // cardItem.quantity++;
-    // } else {
-      // _card.add(CardItem(food: food, selectedAddons: selectedAddons));
-    // }
-    // print(_card.length);
-    notifyListeners();
-  }
-
-  //   Remove From  Card
-  void removeFromCard( cardItem) {
-    int cardIndex = _card.indexOf(cardItem);
-    if (cardIndex != -1) {
-      // if (_card[cardIndex].quantity > 1) {
-      //   // _card[cardIndex].quantity--;
-      // } else {
-      //   _card.removeAt(cardIndex);
-      // }
-    }
-    notifyListeners();
-  }
 
   // Get Total price of card
 
@@ -66,15 +34,6 @@ class Restaurant extends ChangeNotifier {
     return total;
   }
 
-  // get total numbers of  item in card
-  int getTotalItemCount() {
-    int totalItemCount = 0;
-
-    // for (cartItem in _card) {
-    //   // totalItemCount += cartItem.quantity;
-    // }
-    return totalItemCount;
-  }
 
   // clear cart
   void clearCart() {
@@ -109,7 +68,7 @@ class Restaurant extends ChangeNotifier {
     }
     receipt.writeln("--------------");
     receipt.writeln();
-    receipt.writeln(" Total items: ${getTotalItemCount()}");
+    receipt.writeln(" Total items:");
     receipt.writeln(" Total Price: ${_formatPrice(getTotalPrice())}");
 
     return receipt.toString();
