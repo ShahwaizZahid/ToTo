@@ -1,11 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../models/restaurant.dart';
 
 class MyReceipt extends StatelessWidget {
-  const MyReceipt({super.key});
+  final String receipt;
+  const MyReceipt(this.receipt, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,19 +12,22 @@ class MyReceipt extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text("Thank you for your order!"),
+            Text("Thank you for your order!", style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold
+
+            ),),
             const SizedBox(height: 25),
             Container(
               decoration: BoxDecoration(
-                border: Border.all( color: Theme.of(context).colorScheme.secondary),
-                borderRadius: BorderRadius.circular(8)
+                border: Border.all( color: Theme.of(context).colorScheme.background, width: 2), // Border color and width
+                borderRadius: BorderRadius.circular(16), // Optional: rounded corners
+                color: Theme.of(context).colorScheme.background, // Optional: background color inside the border
               ),
               padding: const EdgeInsets.all(25),
-              child: Consumer<Restaurant>(builder:(context, restaurant , child) => Text(restaurant.displayCartReceipt())),
+              child: Text(receipt,
+              style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),),
             ),
-            const SizedBox(height: 25),
-            const Text("Estimate delivery time 4:10PM"),
-
           ],
         ),
       ),

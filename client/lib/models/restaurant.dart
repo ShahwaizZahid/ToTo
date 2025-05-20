@@ -1,88 +1,95 @@
-import 'package:client/models/card_item.dart';
-import 'package:client/models/food.dart';
 import 'package:flutter/cupertino.dart';
-// ignore: depend_on_referenced_packages
-import 'package:collection/collection.dart';
 import 'package:intl/intl.dart';
 
 class Restaurant extends ChangeNotifier {
-  final List<Food> _menu = [];
 
-  //   G E T T E R S
-  List<Food> get menu => _menu;
-  List get cart => _card;
-
-  // O P E R A T I O N S
-  final List _card = [];
-
-
-
-  // Get Total price of card
-
-  double getTotalPrice() {
-    double total = 0.0;
-    // for (cartItem in _card) {
-    //   double itemTotal = cartItem.food.price;
-    //
-    //   for (addon in cartItem.selectedAddons) {
-    //     itemTotal += addon.price;
-    //   }
-
-      // total += itemTotal * cartItem.quantity;
-    // }
-
-    return total;
-  }
-
-
-  // clear cart
-  void clearCart() {
-    _card.clear();
-    notifyListeners();
-  }
-
-  // GENERATE RECEIPT
-  String displayCartReceipt() {
+  // ===================================
+  //        Reciept Generation
+  // ===================================
+  String generateReceipt(List cartData) {
     final receipt = StringBuffer();
-    receipt.writeln("Here's your receipt. ");
-    receipt.writeln();
 
-    //      format the date to include up to seconds only
-    String formattedDate = DateFormat(
-      'yyyy-MM-dd HH:mm:ss',
-    ).format(DateTime.now());
-    receipt.writeln(formattedDate);
-    receipt.writeln();
-    receipt.writeln("----------------");
+    int totalItems = 0;
+    double totalPrice = 0;
 
-    for (final cartIten in _card) {
-      // receipt.writeln(
-      //   " ${cartIten.quantity} x ${cartIten.food.name} - ${_formatPrice(cartIten.food.price)}",
-      // );
-      if (cartIten.selectedAddons.isNotEmpty) {
-        receipt.writeln(
-          "     Add-ons: ${_formatAddons(cartIten.selectedAddons)} ",
-        );
+    for (final cartItem in cartData) {
+      int quantity = (cartItem['count'] ?? 0).toInt();
+
+      final name = cartItem['name'] ?? 'Unknown';
+
+      final price = (cartItem['price'] is int)
+          ? (cartItem['price'] as int).toDouble()
+          : (cartItem['price'] ?? 0.0);
+
+      final addons = cartItem['addons'] as List<dynamic>? ?? [];
+
+      // Calculate total add-ons price
+      double addonsTotalPrice = 0;
+      for (final addon in addons) {
+        double addonPrice = 0;
+        if (addon is Map && addon.containsKey('price')) {
+          addonPrice = (addon['price'] is int)
+              ? (addon['price'] as int).toDouble()
+              : (addon['price'] ?? 0.0);
+        }
+        addonsTotalPrice += addonPrice;
       }
+
+      num itemBaseTotal = quantity * price;
+
+      double itemAddonsTotal = quantity * addonsTotalPrice; // add-ons price per quantity
+
+      double itemTotalPrice = itemBaseTotal + itemAddonsTotal;
+
+      totalItems += quantity;
+      totalPrice += itemTotalPrice;
+
+      receipt.writeln("$quantity x $name - ${_formatPrice(price)} each");
+
+      if (addons.isNotEmpty) {
+        receipt.writeln("     Add-ons:");
+        for (final addon in addons) {
+          final addonName = addon['name'] ?? 'Addon';
+          final addonPrice = (addon['price'] is int)
+              ? (addon['price'] as int).toDouble()
+              : (addon['price'] ?? 0.0);
+          receipt.writeln("       - $addonName: ${_formatPrice(addonPrice)}");
+        }
+      }
+
+      receipt.writeln("     Item total: ${_formatPrice(itemTotalPrice)}");
       receipt.writeln();
     }
-    receipt.writeln("--------------");
-    receipt.writeln();
-    receipt.writeln(" Total items:");
-    receipt.writeln(" Total Price: ${_formatPrice(getTotalPrice())}");
+
+    // Calculate delivery time: now + 30 minutes
+    final now = DateTime.now();
+    final deliveryTime = now.add(Duration(minutes: 30));
+    // Format delivery time nicely, e.g., "3:45 PM"
+    final formattedDeliveryTime = DateFormat.jm().format(deliveryTime);
+
+    receipt.writeln("----------------------------------------------------------------");
+    receipt.writeln("Total items: $totalItems");
+    receipt.writeln("Total Price: ${_formatPrice(totalPrice)}");
+    receipt.writeln("Estimated Delivery Time: $formattedDeliveryTime");
+    receipt.writeln("----------------------------------------------------------------");
 
     return receipt.toString();
   }
 
-  // format price double value into money
+
+  // ===================================
+  //        Price Format
+  // ===================================
   String _formatPrice(double price) {
     return "\$${price.toStringAsFixed(2)}";
   }
 
-  // Format a list of addons into a string summary
-  String _formatAddons(List addons) {
-    return addons
-        .map((addon) => '${addon.name} (${_formatPrice(addon.price)})')
-        .join(', ');
+
+  // ===================================
+  //       Addons format
+  // ===================================
+  String _formatAddons(List<dynamic> addons) {
+    // assuming each addon is a map with a 'name' key
+    return addons.map((a) => a['name']).join(', ');
   }
 }

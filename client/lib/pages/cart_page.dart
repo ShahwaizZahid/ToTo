@@ -19,6 +19,7 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   List userCart = [];
   bool isLoading = false;
+  bool isCartLoading = true;
 
   @override
   void initState() {
@@ -26,6 +27,7 @@ class _CartPageState extends State<CartPage> {
     fetchCartItems().then((items) {
       setState(() {
         userCart = items;
+        isCartLoading = false;
       });
     });
   }
@@ -46,22 +48,21 @@ class _CartPageState extends State<CartPage> {
       );
 
       if (response.statusCode == 200) {
-        final List<dynamic> cartItems = jsonDecode(response.body); // ✅ directly parse as List
+        final List<dynamic> cartItems = jsonDecode(response.body);
         return cartItems;
       } else {
-        print('Failed to load cart items. Status code: ${response.statusCode}');
+        showMessage('Failed to load cart items. Status code: ${response.statusCode}');
       }
-      setState(() {
-        isLoading= false;
-      });
     } catch (e) {
-      setState(() {
-        isLoading= false;
-      });
-      print('Error loading cart items: $e');
+      showMessage('Error loading cart items: $e');
     }
 
     return [];
+  }
+
+
+  void showMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -79,54 +80,99 @@ class _CartPageState extends State<CartPage> {
             actions: [
               IconButton(
                   onPressed: () {
+                    if(userCart.length <= 0){
+                      return;
+                    }
                     showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                              title: const Text(
-                                  'Are you sure you want to clear the cart'),
-                              actions: [
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text('cancel')),
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      retanurant.clearCart();
-                                    },
-                                    child: const Text('yes'))
-                              ],
-                            ));
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Are you sure you want to clear the cart?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              Navigator.pop(context);
+
+                              setState(() {
+                                isLoading = true;
+                              });
+
+                              final prefs = await SharedPreferences.getInstance();
+                              final userId = prefs.getString('UserId');
+
+                              if (userId != null) {
+                                final response = await http.post(
+                                  Uri.parse('http://10.0.2.2:5001/clear_cart?userId=$userId'),
+                                );
+
+                                if (response.statusCode == 200) {
+                                  setState(() {
+                                    userCart.clear();
+                                    isLoading = false;
+                                  });
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Cart cleared successfully!'),
+                                      backgroundColor: Colors.green,
+                                    ),
+                                  );
+                                } else {
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Failed to clear cart.'),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                }
+                              } else {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('User ID not found.'),
+                                    backgroundColor: Colors.orange,
+                                  ),
+                                );
+                              }
+                            },
+                            child: const Text('Yes'),
+                          ),
+                        ],
+                      ),
+                    );
                   },
+
+
                   icon: Icon( userCart.isEmpty ?Icons.shopping_cart :Icons.delete))
             ],
           ),
           body: Column(
             children: [
               Expanded(
-                child: Column(
-                  children: [
-                     userCart.isEmpty
-                        ? Expanded(
-                      child: Center(
-                        child: Text(
-                          'Cart is empty.......',
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.inversePrimary),
-                        ),
-                      ),
-                    )
-                        : Expanded(
-                      child: ListView.builder(
-                        itemCount: userCart.length,
-                        itemBuilder: (context, index) {
-                          final cartItem = userCart[index];
-                          return MyCartTile(cartItem: cartItem);
-                        },
-                      ),
-                    )
-                  ],
+                child: isCartLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : userCart.isEmpty
+                    ? Center(
+                  child: Text(
+                    'Cart is empty.......',
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.inversePrimary),
+                  ),
+                )
+                    : ListView.builder(
+                  itemCount: userCart.length,
+                  itemBuilder: (context, index) {
+                    final cartItem = userCart[index];
+                    return MyCartTile(cartItem: cartItem);
+                  },
                 ),
               ),
               MyButton(
