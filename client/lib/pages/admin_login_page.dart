@@ -17,7 +17,44 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
- 
+  Future<void> loginAdmin() async {
+    final username = usernameController.text.trim();
+    final password = passwordController.text.trim();
+
+    if (username.isEmpty || password.isEmpty) {
+      showMessage('Please fill in all fields');
+      return;
+    }
+
+    final url = Uri.parse('http://10.0.2.2:5001/admin/login');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'username': username, 'password': password}),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && data['status'] == 'success') {
+        showMessage(data['message']);
+
+        Future.delayed(Duration(seconds: 1), () {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const AdminPage()),
+                (route) => false,
+          );
+        });
+      } else {
+        showMessage(data['message']);
+      }
+    } catch (e) {
+      showMessage('Login failed: $e');
+    }
+  }
+
   void showMessage(String message) {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
