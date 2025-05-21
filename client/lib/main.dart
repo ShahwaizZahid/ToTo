@@ -12,16 +12,19 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   final isLoggedIn = prefs.getBool('loggedIn') ?? false;
 
+  final themeProvider = ThemeProvider(); // Will auto-load theme inside
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider<ThemeProvider>.value(value: themeProvider),
         ChangeNotifierProvider(create: (context) => Restaurant()),
       ],
       child: MyApp(isLoggedIn: isLoggedIn),
     ),
   );
 }
+
 
 class MyApp extends StatelessWidget {
 
