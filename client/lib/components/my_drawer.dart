@@ -1,4 +1,5 @@
 import 'package:client/components/my_drawer_tile.dart';
+import 'package:client/pages/about_page.dart';
 import 'package:client/pages/login_page.dart';
 import 'package:client/pages/setting_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -44,6 +45,18 @@ class MyDrawer extends StatelessWidget {
               );
             },
           ),
+          MyDrawerTile(
+            text: 'A B O U T',
+            icon: Icons.info_outline,
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AboutPage()),
+              );
+            },
+          ),
+
           MyDrawerTile(
             text: 'S E T T I N G',
             icon: Icons.settings,
