@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../pages/help_page.dart';
+
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
 
@@ -32,18 +34,29 @@ class MyDrawer extends StatelessWidget {
             onTap: () => Navigator.pop(context),
           ),
           MyDrawerTile(
+            text: 'H E L P',
+            icon: Icons.help_outline,
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HelpPage()),
+              );
+            },
+          ),
+          MyDrawerTile(
             text: 'S E T T I N G',
             icon: Icons.settings,
             onTap:
                 () => {
-                  Navigator.pop(context),
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SettingPage(),
-                    ),
-                  ),
-                },
+              Navigator.pop(context),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SettingPage(),
+                ),
+              ),
+            },
           ),
           const Spacer(),
           MyDrawerTile(
