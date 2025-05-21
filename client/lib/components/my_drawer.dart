@@ -24,38 +24,45 @@ class MyDrawer extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(25.0),
-            child: Divider(
-              color: Theme.of(context).colorScheme.secondary,
-            ),
+            child: Divider(color: Theme.of(context).colorScheme.secondary),
           ),
           MyDrawerTile(
-              text: 'H O M E',
-              icon: Icons.home,
-              onTap: () => Navigator.pop(context)),
+            text: 'H O M E',
+            icon: Icons.home,
+            onTap: () => Navigator.pop(context),
+          ),
           MyDrawerTile(
-              text: 'S E T T I N G',
-              icon: Icons.settings,
-              onTap: () => {
-                    Navigator.pop(context),
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SettingPage()))
-                  }),
+            text: 'S E T T I N G',
+            icon: Icons.settings,
+            onTap:
+                () => {
+                  Navigator.pop(context),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SettingPage(),
+                    ),
+                  ),
+                },
+          ),
           const Spacer(),
           MyDrawerTile(
-              text: 'L O G O U T ',
-              icon: Icons.logout,
-              onTap: () async {
+            text: 'L O G O U T ',
+            icon: Icons.logout,
+            onTap: () async {
               final prefs = await SharedPreferences.getInstance();
               await prefs.setBool('loggedIn', false);
+              final userId = prefs.remove('userId');
+
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => LoginPage()),
-                    (Route<dynamic> route) => false, // this removes all previous routes
+                (Route<dynamic> route) =>
+                    false, // this removes all previous routes
               );
-          }),
-          const SizedBox(height: 25)
+            },
+          ),
+          const SizedBox(height: 25),
         ],
       ),
     );
