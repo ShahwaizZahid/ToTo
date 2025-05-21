@@ -1,11 +1,13 @@
 import 'package:client/components/my_drawer_tile.dart';
 import 'package:client/pages/about_page.dart';
+import 'package:client/pages/admin_login_page.dart';
 import 'package:client/pages/login_page.dart';
 import 'package:client/pages/setting_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../pages/admin_page.dart';
 import '../pages/help_page.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -33,6 +35,17 @@ class MyDrawer extends StatelessWidget {
             text: 'H O M E',
             icon: Icons.home,
             onTap: () => Navigator.pop(context),
+          ),
+          MyDrawerTile(
+            text: 'A D M I N',
+            icon: Icons.admin_panel_settings,
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AdminLoginPage()),
+              );
+            },
           ),
           MyDrawerTile(
             text: 'H E L P',
