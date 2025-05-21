@@ -19,6 +19,7 @@ db = client[db_name]
 user_collection = db['users']
 restaurant_collection = db['RestaurantList']
 add_cart_items = db['add_cart_items']
+admin_user_collection = db['admin_users']
 
 def check_mongo_connection():
     try:
