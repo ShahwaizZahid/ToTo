@@ -1,3 +1,4 @@
+import 'package:client/pages/add_food_page.dart';
 import 'package:flutter/material.dart';
 
 class AdminPage extends StatelessWidget {
@@ -22,7 +23,11 @@ class AdminPage extends StatelessWidget {
             _buildAdminTile(context, Icons.list, "View All Orders", () {
               // Navigate or show dialog
             }),
-            _buildAdminTile(context, Icons.add_circle_outline, "Add  New Food", () {// Navigate or show dialog
+            _buildAdminTile(context, Icons.add_circle_outline, "Add  New Food", () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AddFoodPage()),
+              );
             }),
             _buildAdminTile(context, Icons.delete_outline, "Delete  Food", () {// Navigate or show dialog
             }),

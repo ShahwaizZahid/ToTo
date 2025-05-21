@@ -30,45 +30,39 @@ class _DeliveryProgessPageState extends State<DeliveryProgessPage> {
     });
   }
 
-
   Future<List<dynamic>> fetchCartItems() async {
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('UserId');
     if (userId == null) {
-      print("user not");
       return [];
     }
 
     try {
       setState(() {
-        isLoading= true;
+        isLoading = true;
       });
       final response = await http.get(
         Uri.parse('http://10.0.2.2:5001/get_cart_items?userId=$userId'),
       );
 
       if (response.statusCode == 200) {
-
-        final List<dynamic> cartItems = jsonDecode(response.body); // ✅ directly parse as List
-        print("ad");
+        final List<dynamic> cartItems = jsonDecode(response.body);
         return cartItems;
       } else {
         print('Failed to load cart items. Status code: ${response.statusCode}');
       }
       setState(() {
-        isLoading= false;
+        isLoading = false;
       });
     } catch (e) {
       setState(() {
-        isLoading= false;
+        isLoading = false;
       });
       print('Error loading cart items: $e');
     }
 
     return [];
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +75,10 @@ class _DeliveryProgessPageState extends State<DeliveryProgessPage> {
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Center(
-          child: isLoading ? Center(child: CircularProgressIndicator()): MyReceipt(Restaurant().generateReceipt(userCart)),
+          child:
+              isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : MyReceipt(Restaurant().generateReceipt(userCart)),
         ),
       ),
     );
@@ -91,21 +88,27 @@ class _DeliveryProgessPageState extends State<DeliveryProgessPage> {
     return Container(
       height: 100,
       decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.secondary,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(40), topRight: Radius.circular(40))),
+        color: Theme.of(context).colorScheme.secondary,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(40),
+          topRight: Radius.circular(40),
+        ),
+      ),
       padding: const EdgeInsets.all(25),
       child: Row(
         children: [
           // Profile Pic of  Deliver
           Container(
             decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.background,
-                shape: BoxShape.circle),
+              color: Theme.of(context).colorScheme.background,
+              shape: BoxShape.circle,
+            ),
             child: IconButton(
               onPressed: () {},
-              icon: Icon(Icons.person,
-                  color: Theme.of(context).colorScheme.primary),
+              icon: Icon(
+                Icons.person,
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
           ),
           SizedBox(width: 10),
@@ -115,14 +118,15 @@ class _DeliveryProgessPageState extends State<DeliveryProgessPage> {
               Text(
                 "Farooq",
                 style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.inversePrimary),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
               ),
               Text(
                 "Driver",
                 style: TextStyle(color: Theme.of(context).colorScheme.primary),
-              )
+              ),
             ],
           ),
           Spacer(),
@@ -130,8 +134,9 @@ class _DeliveryProgessPageState extends State<DeliveryProgessPage> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.background,
-                    shape: BoxShape.circle),
+                  color: Theme.of(context).colorScheme.background,
+                  shape: BoxShape.circle,
+                ),
                 child: IconButton(
                   onPressed: () {},
                   icon: Icon(Icons.message),
@@ -141,8 +146,9 @@ class _DeliveryProgessPageState extends State<DeliveryProgessPage> {
               SizedBox(width: 10),
               Container(
                 decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.background,
-                    shape: BoxShape.circle),
+                  color: Theme.of(context).colorScheme.background,
+                  shape: BoxShape.circle,
+                ),
                 child: IconButton(
                   onPressed: () {},
                   icon: Icon(Icons.call),
@@ -150,7 +156,7 @@ class _DeliveryProgessPageState extends State<DeliveryProgessPage> {
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

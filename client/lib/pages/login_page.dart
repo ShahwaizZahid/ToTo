@@ -19,12 +19,6 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  void login(){
-
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>  const HomePage()));
-  }
-
-
   Future<void> loginUser() async {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
