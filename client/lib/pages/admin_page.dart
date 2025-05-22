@@ -1,5 +1,10 @@
 import 'package:client/pages/add_food_page.dart';
+import 'package:client/pages/delete_food_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../themes/theme_provider.dart';
 
 class AdminPage extends StatelessWidget {
   const AdminPage({super.key});
@@ -29,7 +34,11 @@ class AdminPage extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => const AddFoodPage()),
               );
             }),
-            _buildAdminTile(context, Icons.delete_outline, "Delete  Food", () {// Navigate or show dialog
+            _buildAdminTile(context, Icons.delete_outline, "Delete  Food", () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const DeleteFoodPage()),
+              );
             }),
             _buildAdminTile(context, Icons.fastfood, "Manage Menu Items", () {
               // Navigate or show dialog
@@ -54,7 +63,38 @@ class AdminPage extends StatelessWidget {
                   // Handle admin logout
                 },
               ),
-            )
+            ),
+
+
+
+            Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(left: 25, right: 25, top: 10),
+                  padding: const EdgeInsets.all(25),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Dark Mode',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.inversePrimary),
+                      ),
+                      CupertinoSwitch(
+                        value: Provider.of<ThemeProvider>(context).isDarkMode,
+                        onChanged: (value) => Provider.of<ThemeProvider>(context, listen: false).toggleTheme(),
+                      ),
+
+                    ],
+                  ),
+                )
+              ],
+            ),
           ],
         ),
       ),
