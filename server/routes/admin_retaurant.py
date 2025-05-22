@@ -51,11 +51,34 @@ def get_all_users():
 
         return jsonify({
             "status": "success",
-            "users": users
+            "users": users,
+            'length': len(users)
         }), 200
 
     except Exception as e:
         return jsonify({
             "status": "error",
             "message": "Failed to retrieve users."
-        }), 500        
+        }), 500      
+
+
+@admin_restaurant_routes.route('/api/admin/user/delete/<user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    try:
+        result = user_collection.delete_one({'_id': ObjectId(user_id)})
+
+        if result.deleted_count == 1:
+            return jsonify({
+                'status': 'success',
+                'message': 'User deleted successfully.'
+            }), 200
+        else:
+            return jsonify({
+                'status': 'failure',
+                'message': 'User not found.'
+            }), 404
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': f'Error deleting user: {str(e)}'
+        }), 500
