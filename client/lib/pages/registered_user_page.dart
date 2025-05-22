@@ -78,16 +78,17 @@ class _RegisteredUsersPageState extends State<RegisteredUsersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Registered Users'),
-        centerTitle: true,
-        backgroundColor: Theme.of(context).colorScheme.surface,
-      ),
       backgroundColor: Theme.of(context).colorScheme.background,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.inversePrimary),
+        title:  Text('Registered Users', style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),),
+        centerTitle: true,
+      ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : users.isEmpty
-          ? const Center(child: Text('No users found'))
+          ?  Center(child: Text('No users found', style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),))
           : ListView.builder(
         itemCount: users.length,
         itemBuilder: (context, index) {

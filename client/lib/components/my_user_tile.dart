@@ -17,10 +17,13 @@ class MyUserTile extends StatelessWidget {
     final color = Theme.of(context).colorScheme;
 
     return Card(
+      color: Theme.of(context).colorScheme.background,
       elevation: 4,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      color: color.surface.withOpacity(0.95),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),side: BorderSide(
+      color: Theme.of(context).colorScheme.inversePrimary, // 👈 Border color
+      width: 1.5,               // 👈 Border width
+    )),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         leading: CircleAvatar(
@@ -36,14 +39,14 @@ class MyUserTile extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 16,
-            color: color.onSurface,
+            color: Theme.of(context).colorScheme.inversePrimary
           ),
         ),
         subtitle: Text(
           password,
           style: TextStyle(
             fontSize: 14,
-            color: color.onSurface.withOpacity(0.6),
+              color: Theme.of(context).colorScheme.inversePrimary,
             fontStyle: FontStyle.italic,
           ),
         ),
