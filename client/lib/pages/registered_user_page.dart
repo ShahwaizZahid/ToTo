@@ -1,0 +1,104 @@
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import '../components/my_user_tile.dart';
+
+class RegisteredUsersPage extends StatefulWidget {
+  const RegisteredUsersPage({super.key});
+
+  @override
+  State<RegisteredUsersPage> createState() => _RegisteredUsersPageState();
+}
+
+class _RegisteredUsersPageState extends State<RegisteredUsersPage> {
+  List<Map<String, dynamic>> users = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUsers();
+  }
+
+  Future<void> fetchUsers() async {
+    try {
+      final response = await http.get(Uri.parse('http://10.0.2.2:5001/api/admin/users'));
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = jsonDecode(response.body);
+        final List<dynamic> userList = data['users'];  // ✅ get the actual list
+        setState(() {
+          users = userList.cast<Map<String, dynamic>>();
+          isLoading = false;
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to load users')));
+      }
+    } catch (e) {
+      setState(() => isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+    }
+  }
+
+
+  Future<void> deleteUser(String id) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete User'),
+        content: const Text('Are you sure you want to delete this user?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
+          TextButton(onPressed: () => Navigator.pop(context, true), child: const Text('Delete', style: TextStyle(color: Colors.red))),
+        ],
+      ),
+    );
+
+    if (confirm != true) return;
+
+    try {
+      final response = await http.delete(Uri.parse('http://10.0.2.2:5001/api/admin/user/delete/$id'));
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        setState(() {
+          users.removeWhere((user) => user['_id'] == id);
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(data['message'].toString())),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to delete user')));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Registered Users'),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).colorScheme.surface,
+      ),
+      backgroundColor: Theme.of(context).colorScheme.background,
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : users.isEmpty
+          ? const Center(child: Text('No users found'))
+          : ListView.builder(
+        itemCount: users.length,
+        itemBuilder: (context, index) {
+          final user = users[index];
+          return MyUserTile(
+            email: user['email'] ?? 'Unknown',
+            password: user['password'] ?? '*****',
+            onDelete: () => deleteUser(user['_id']),
+          );
+        },
+      ),
+    );
+  }
+}

@@ -1,5 +1,6 @@
 import 'package:client/pages/add_food_page.dart';
 import 'package:client/pages/delete_food_page.dart';
+import 'package:client/pages/registered_user_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,11 +41,11 @@ class AdminPage extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => const DeleteFoodPage()),
               );
             }),
-            _buildAdminTile(context, Icons.fastfood, "Manage Menu Items", () {
-              // Navigate or show dialog
-            }),
             _buildAdminTile(context, Icons.people, "View Registered Users", () {
-              // Navigate or show dialog
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const RegisteredUsersPage()),
+              );
             }),
             SizedBox(height: 20),
             Row(
