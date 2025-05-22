@@ -1,4 +1,5 @@
 import 'package:client/models/restaurant.dart';
+import 'package:client/pages/admin_page.dart';
 import 'package:client/pages/home_page.dart';
 import 'package:client/pages/register_page.dart';
 import 'package:client/themes/theme_provider.dart';
@@ -11,6 +12,7 @@ void main() async {
 
   final prefs = await SharedPreferences.getInstance();
   final isLoggedIn = prefs.getBool('loggedIn') ?? false;
+  final isAdminLoggedIn = prefs.getBool('adminLoggedIn') ?? false;
 
   final themeProvider = ThemeProvider(); // Will auto-load theme inside
 
@@ -20,17 +22,23 @@ void main() async {
         ChangeNotifierProvider<ThemeProvider>.value(value: themeProvider),
         ChangeNotifierProvider(create: (context) => Restaurant()),
       ],
-      child: MyApp(isLoggedIn: isLoggedIn),
+      child: MyApp(
+        isLoggedIn: isLoggedIn,
+        isAdminLoggedIn: isAdminLoggedIn,
+      ),
     ),
   );
 }
 
-
 class MyApp extends StatelessWidget {
-
   final bool isLoggedIn;
+  final bool isAdminLoggedIn;
 
-  const MyApp({super.key, required this.isLoggedIn});
+  const MyApp({
+    super.key,
+    required this.isLoggedIn,
+    required this.isAdminLoggedIn,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +46,11 @@ class MyApp extends StatelessWidget {
       title: 'TOTO',
       debugShowCheckedModeBanner: false,
       theme: Provider.of<ThemeProvider>(context).themeData,
-      home: isLoggedIn ? const HomePage() :  RegisterPage(),
+      home: isAdminLoggedIn
+          ? const AdminPage()
+          : isLoggedIn
+          ? const HomePage()
+          : const RegisterPage(),
     );
   }
 }
