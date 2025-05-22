@@ -1,15 +1,52 @@
+import 'dart:convert';
+
 import 'package:client/pages/add_food_page.dart';
+import 'package:client/pages/admin_login_page.dart';
 import 'package:client/pages/delete_food_page.dart';
 import 'package:client/pages/registered_user_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../themes/theme_provider.dart';
 
-class AdminPage extends StatelessWidget {
+class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
 
+  @override
+  State<AdminPage> createState() => _AdminPageState();
+}
+
+class _AdminPageState extends State<AdminPage> {
+  late int userLength = 0;
+
+  Future<void> fetchUsers() async {
+    try {
+      final response = await http.get(Uri.parse('http://10.0.2.2:5001/api/admin/users'));
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          userLength = data['length'];
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to load users')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
+  }
+  @override
+  void initState() {
+    super.initState();
+    fetchUsers();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +89,7 @@ class AdminPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _buildStatCard("Orders", "128", Icons.shopping_cart),
-                _buildStatCard("Users", "56", Icons.people),
+                _buildStatCard("Users", "$userLength", Icons.people),
               ],
             ),
             Card(
@@ -60,13 +97,20 @@ class AdminPage extends StatelessWidget {
               child: ListTile(
                 leading: Icon(Icons.logout, color: Colors.red),
                 title: Text("Log Out"),
-                onTap: () {
-                  // Handle admin logout
+                onTap: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setBool('loggedIn', false);
+                  final userId = prefs.remove('userId');
+
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => AdminLoginPage()),
+                        (Route<dynamic> route) =>
+                    false, // this removes all previous routes
+                  );
                 },
               ),
             ),
-
-
 
             Column(
               children: [

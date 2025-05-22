@@ -1,5 +1,6 @@
 import 'package:client/components/my_button.dart';
 import 'package:client/components/my_textfield.dart';
+import 'package:client/pages/admin_login_page.dart';
 import 'package:client/pages/home_page.dart';
 import 'package:client/pages/register_page.dart';
 import 'package:flutter/material.dart';
@@ -129,6 +130,33 @@ class _LoginPageState extends State<LoginPage> {
                       ));},
                   child: Text(
                     'Register now',
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Login as Admin?',
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.inversePrimary),
+                ),
+                const SizedBox(
+                  width: 4,
+                ),
+                GestureDetector(
+                  onTap: (){Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) =>
+                          AdminLoginPage(), // dummy onTap if not needed
+                      ));},
+                  child: Text(
+                    'Login now',
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.inversePrimary,
                         fontWeight: FontWeight.bold),

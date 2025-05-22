@@ -1,9 +1,12 @@
 import 'package:client/pages/admin_page.dart';
 import 'package:client/components/my_button.dart';
 import 'package:client/components/my_textfield.dart';
+import 'package:client/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminLoginPage extends StatefulWidget {
   const AdminLoginPage({super.key});
@@ -37,6 +40,9 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
 
       if (response.statusCode == 200 && data['status'] == 'success') {
         showMessage(data['message']);
+
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('adminLoggedIn', true);
 
         Future.delayed(Duration(seconds: 1), () {
           Navigator.pushAndRemoveUntil(
@@ -94,7 +100,35 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
               const SizedBox(height: 20),
               Text("Authorized access only",
                   style: TextStyle(
-                      color: Theme.of(context).colorScheme.inversePrimary))
+                      color: Theme.of(context).colorScheme.inversePrimary)),
+
+              SizedBox(height: 5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Login as customer?',
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.inversePrimary),
+                  ),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  GestureDetector(
+                    onTap: (){Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>
+                            LoginPage(), // dummy onTap if not needed
+                        ));},
+                    child: Text(
+                      'Login now',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
         ),
