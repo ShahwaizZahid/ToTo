@@ -97,10 +97,9 @@ class _AdminPageState extends State<AdminPage> {
               child: ListTile(
                 leading: Icon(Icons.logout, color: Colors.red),
                 title: Text("Log Out"),
-                onTap: () async {
+                onTap: ()async {
                   final prefs = await SharedPreferences.getInstance();
-                  await prefs.setBool('loggedIn', false);
-                  final userId = prefs.remove('userId');
+                  await prefs.setBool('adminLoggedIn', false);
 
                   Navigator.pushAndRemoveUntil(
                     context,
