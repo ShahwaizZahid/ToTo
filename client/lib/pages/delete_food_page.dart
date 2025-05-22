@@ -78,16 +78,17 @@ class _DeleteFoodPageState extends State<DeleteFoodPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Delete Foods'),
-        centerTitle: true,
-        backgroundColor: Theme.of(context).colorScheme.surface,
-      ),
       backgroundColor: Theme.of(context).colorScheme.background,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        title:  Text('Delete Foods', style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),),
+        centerTitle: true,
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.inversePrimary),
+      ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : foodList.isEmpty
-          ? const Center(child: Text('No food items available'))
+          ?  Center(child: Text('No food items available', style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary)))
           : ListView.builder(
         itemCount: foodList.length,
         padding: const EdgeInsets.only(bottom: 20),

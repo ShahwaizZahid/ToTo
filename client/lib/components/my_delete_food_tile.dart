@@ -10,9 +10,13 @@ class DeleteFoodTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Theme.of(context).colorScheme.background,
       elevation: 4,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: BorderSide(
+        color: Theme.of(context).colorScheme.inversePrimary, // 👈 Border color
+        width: 1.5,               // 👈 Border width
+      ),),
       child: Padding(
         padding: const EdgeInsets.all(14.0),
         child: Row(
@@ -58,7 +62,7 @@ class DeleteFoodTile extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Theme.of(context).colorScheme.primary,
                       fontSize: 13,
                     ),
                   ),
