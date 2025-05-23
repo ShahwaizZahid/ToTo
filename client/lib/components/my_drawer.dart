@@ -5,6 +5,7 @@ import 'package:client/pages/setting_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../pages/help_page.dart';
+import '../pages/orders_page.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
@@ -35,7 +36,15 @@ class MyDrawer extends StatelessWidget {
           MyDrawerTile(
             text: 'O R D E R S',
             icon: Icons.shopping_cart,
-            onTap: () => Navigator.pop(context),
+            onTap: () => {
+              Navigator.pop(context),
+            Navigator.push(
+            context,
+            MaterialPageRoute(
+            builder: (context) => OrdersPage(),
+            ),
+            )
+            },
           ),
           MyDrawerTile(
             text: 'H E L P',
