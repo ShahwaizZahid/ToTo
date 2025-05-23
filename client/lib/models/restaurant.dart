@@ -43,7 +43,6 @@ class Restaurant extends ChangeNotifier {
 
       totalItems += quantity;
       totalPrice += itemTotalPrice;
-
       receipt.writeln("$quantity x $name - ${_formatPrice(price)} each");
 
       if (addons.isNotEmpty) {
@@ -60,6 +59,7 @@ class Restaurant extends ChangeNotifier {
       receipt.writeln("     Item total: ${_formatPrice(itemTotalPrice)}");
       receipt.writeln();
     }
+    totalPrice += 0.20;
 
     // Calculate delivery time: now + 30 minutes
     final now = DateTime.now();
