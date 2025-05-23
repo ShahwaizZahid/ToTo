@@ -1,7 +1,7 @@
 from flask import  jsonify,request
-from config.db import restaurant_collection, add_cart_items
+from config.db import restaurant_collection, add_cart_items, orders_collection
 from bson import ObjectId
-
+import datetime
 
 
 # ----------------------------
@@ -155,3 +155,25 @@ def clear_cart():
     result = add_cart_items.delete_many({'userId': user_id})
 
     return jsonify({'message': 'Cart clear successfully'})
+
+
+# ----------------------------
+#    Placed Order
+# ----------------------------
+def create_order():
+    data = request.get_json()
+
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+
+    # Optional: Add a timestamp
+    data['timestamp'] = datetime.datetime.utcnow()
+    data['orderStatus'] = "Pending"
+    try:
+        result = orders_collection.insert_one(data)
+        return jsonify({
+            "message": "Order successfully placed",
+            "order_id": str(result.inserted_id)
+        }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
