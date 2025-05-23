@@ -43,7 +43,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
 
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('adminLoggedIn', true);
-
+        prefs.remove('userId');
         Future.delayed(Duration(seconds: 1), () {
           Navigator.pushAndRemoveUntil(
             context,

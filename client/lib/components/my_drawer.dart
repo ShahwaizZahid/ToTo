@@ -91,7 +91,7 @@ class MyDrawer extends StatelessWidget {
             onTap: () async {
               final prefs = await SharedPreferences.getInstance();
               await prefs.setBool('loggedIn', false);
-              final userId = prefs.remove('userId');
+               prefs.remove('userId');
 
               Navigator.pushAndRemoveUntil(
                 context,

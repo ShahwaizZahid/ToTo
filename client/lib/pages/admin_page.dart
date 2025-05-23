@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:client/pages/add_food_page.dart';
 import 'package:client/pages/admin_login_page.dart';
 import 'package:client/pages/delete_food_page.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../themes/theme_provider.dart';
 
 class AdminPage extends StatefulWidget {
@@ -32,59 +30,60 @@ class _AdminPageState extends State<AdminPage> {
           userLength = data['length'];
         });
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to load users')),
-        );
+        _showSnackBar('Failed to load users');
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
+      _showSnackBar('Error: $e');
     }
   }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.redAccent,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     fetchUsers();
   }
+
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Admin Panel'),
+        title:  Text('Admin Panel', style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary)),
         centerTitle: true,
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(" Menu Management", style: Theme.of(context).textTheme.titleMedium),
-            SizedBox(height: 10),
-            _buildAdminTile(context, Icons.list, "View All Orders", () {
-              // Navigate or show dialog
+            _sectionTitle("🍽️ Menu Management"),
+            _buildAdminTile(Icons.list, "View All Orders", () {}),
+            _buildAdminTile(Icons.add_circle_outline, "Add New Food", () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const AddFoodPage()));
             }),
-            _buildAdminTile(context, Icons.add_circle_outline, "Add  New Food", () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const AddFoodPage()),
-              );
+            _buildAdminTile(Icons.delete_outline, "Delete Food", () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const DeleteFoodPage()));
             }),
-            _buildAdminTile(context, Icons.delete_outline, "Delete  Food", () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const DeleteFoodPage()),
-              );
+            const SizedBox(height: 20),
+            _sectionTitle("👥 User Management"),
+            _buildAdminTile(Icons.people, "View Registered Users", () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const RegisteredUsersPage()));
             }),
-            _buildAdminTile(context, Icons.people, "View Registered Users", () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const RegisteredUsersPage()),
-              );
-            }),
-            SizedBox(height: 20),
+            const SizedBox(height: 25),
+            _sectionTitle("📊 Stats"),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -92,84 +91,110 @@ class _AdminPageState extends State<AdminPage> {
                 _buildStatCard("Users", "$userLength", Icons.people),
               ],
             ),
-            Card(
-              margin: EdgeInsets.only(top: 30),
-              child: ListTile(
-                leading: Icon(Icons.logout, color: Colors.red),
-                title: Text("Log Out"),
-                onTap: ()async {
-                  final prefs = await SharedPreferences.getInstance();
-                  await prefs.setBool('adminLoggedIn', false);
-
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => AdminLoginPage()),
-                        (Route<dynamic> route) =>
-                    false, // this removes all previous routes
-                  );
-                },
+            const SizedBox(height: 30),
+            _sectionTitle("⚙️ Settings"),
+            _buildSettingTile(
+              title: "Dark Mode",
+              icon: Icons.dark_mode,
+              trailing: CupertinoSwitch(
+                value: themeProvider.isDarkMode,
+                onChanged: (value) => themeProvider.toggleTheme(),
               ),
             ),
-
-            Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(left: 25, right: 25, top: 10),
-                  padding: const EdgeInsets.all(25),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Dark Mode',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.inversePrimary),
-                      ),
-                      CupertinoSwitch(
-                        value: Provider.of<ThemeProvider>(context).isDarkMode,
-                        onChanged: (value) => Provider.of<ThemeProvider>(context, listen: false).toggleTheme(),
-                      ),
-
-                    ],
-                  ),
-                )
-              ],
-            ),
+            const SizedBox(height: 20),
+            _buildLogoutTile(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildAdminTile(BuildContext context, IconData icon, String title, VoidCallback onTap) {
+  Widget _sectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Text(title, style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.inversePrimary )),
+    );
+  }
+
+  Widget _buildAdminTile(IconData icon, String title, VoidCallback onTap) {
     return Card(
+      color: Theme.of(context).colorScheme.background,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: ListTile(
-        leading: Icon(icon, color: Theme.of(context).colorScheme.primary),
-        title: Text(title),
-        trailing: Icon(Icons.arrow_forward_ios),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        leading: CircleAvatar(
+          backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+          child: Icon(icon, color: Theme.of(context).colorScheme.inversePrimary),
+        ),
+        title: Text(title, style:  TextStyle(fontWeight: FontWeight.w600 , color: Theme.of(context).colorScheme.inversePrimary)),
+        trailing: Icon(Icons.arrow_forward_ios, size: 18, color: Theme.of(context).colorScheme.inversePrimary),
         onTap: onTap,
       ),
     );
   }
 
   Widget _buildStatCard(String label, String count, IconData icon) {
-    return Card(
-      elevation: 2,
-      child: Container(
-        width: 120,
-        padding: EdgeInsets.all(12),
-        child: Column(
-          children: [
-            Icon(icon, size: 30, color: Colors.blue),
-            SizedBox(height: 8),
-            Text(count, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            Text(label, style: TextStyle(fontSize: 14)),
-          ],
+    return Container(
+      width: 140,
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.background, // 🔵 background color
+        border: Border.all(
+          color: Theme.of(context).colorScheme.inversePrimary, // ⚪ border color
+          width: 2,
         ),
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 4))],
+      ),
+
+
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircleAvatar(
+            radius: 20,
+            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            child: Icon(icon, size: 24, color: Theme.of(context).colorScheme.background),
+          ),
+          const SizedBox(height: 10),
+          Text(count, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.inversePrimary)),
+          Text(label, style:  TextStyle(color: Theme.of(context).colorScheme.inversePrimary)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSettingTile({required String title, required IconData icon, required Widget trailing}) {
+    return Card(
+      color: Theme.of(context).colorScheme.background,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      child: ListTile(
+        leading: Icon(icon, color: Theme.of(context).colorScheme.inversePrimary),
+        title: Text(title, style: TextStyle(fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.inversePrimary)),
+        trailing: trailing,
+      ),
+    );
+  }
+
+  Widget _buildLogoutTile() {
+    return Card(
+      color: Theme.of(context).colorScheme.background,
+      elevation: 2,
+      child: ListTile(
+        leading: const Icon(Icons.logout, color: Colors.red),
+        title: const Text("Log Out", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
+        onTap: () async {
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setBool('adminLoggedIn', false);
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const AdminLoginPage()),
+                (route) => false,
+          );
+        },
       ),
     );
   }
