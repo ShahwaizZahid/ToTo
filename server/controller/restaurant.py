@@ -177,3 +177,27 @@ def create_order():
         }), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+# ----------------------------
+#    Get All Placed Orders
+# ----------------------------
+def get_all_orders():
+    try:
+        print("kl")
+        orders_cursor = orders_collection.find()
+        orders = []
+
+        for order in orders_cursor:
+            order['_id'] = str(order['_id'])  # Convert ObjectId to string
+            order['timestamp'] = order['timestamp'].isoformat() if isinstance(order['timestamp'], datetime.datetime) else order['timestamp']
+            order['delivery_time'] = order.get('delivery_time', None)
+            if isinstance(order['delivery_time'], datetime.datetime):
+                order['delivery_time'] = order['delivery_time'].isoformat()
+
+            orders.append(order)
+
+        return jsonify(orders), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500        

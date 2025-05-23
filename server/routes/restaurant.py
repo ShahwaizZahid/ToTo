@@ -1,5 +1,5 @@
 from flask import Blueprint,jsonify,request
-from controller.restaurant import add_to_cart, get_menu,get_cart_items, update_cart_count, clear_cart
+from controller.restaurant import add_to_cart, get_menu,get_cart_items, update_cart_count, clear_cart, create_order, get_all_orders
 from config.db import orders_collection
 import datetime
 
@@ -30,29 +30,15 @@ def update_cart_count_route():
 
 @menu_routes.route('/clear_cart', methods=['POST'])
 def clear_cart_route():
-     return clear_cart()
-
-
-
-# api/orders.py
-
+    return clear_cart()
 
 
 @menu_routes.route('/api/orders', methods=['POST'])
-def create_order():
-    data = request.get_json()
+def create_order_route():
+    return create_order()
+     
 
-    if not data:
-        return jsonify({"error": "No data provided"}), 400
-
-    # Optional: Add a timestamp
-    data['timestamp'] = datetime.datetime.utcnow()
-    data['orderStatus'] = "Pending"
-    try:
-        result = orders_collection.insert_one(data)
-        return jsonify({
-            "message": "Order successfully placed",
-            "order_id": str(result.inserted_id)
-        }), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+@menu_routes.route('/api/get_all_orders', methods=['GET'])
+def get_all_orders_route():
+    return get_all_orders()
+   
