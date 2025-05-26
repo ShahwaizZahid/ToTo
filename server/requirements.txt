@@ -1,13 +1,6 @@
-pip install virtualenv
-python -m venv myenv
-virtualenv myenv
-source myenv/bin/activate
-pip install Flask
-pip install flask-pymongo
-pip install python-dotenv
-pip install flask_cors
-python -m pip install "pymongo[srv]"
-export FLASK_APP=main
-export FLASK_ENV=development
-export FLASK_DEBUG=1
-flask run
+Flask
+flask-pymongo
+flask-cors
+python-dotenv
+pymongo[srv]
+gunicorn
