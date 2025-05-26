@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:client/pages/add_food_page.dart';
 import 'package:client/pages/admin_login_page.dart';
+import 'package:client/pages/admin_orders_page.dart';
 import 'package:client/pages/delete_food_page.dart';
 import 'package:client/pages/registered_user_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,7 +20,8 @@ class AdminPage extends StatefulWidget {
 
 class _AdminPageState extends State<AdminPage> {
   late int userLength = 0;
-
+  late int ordersLength = 0;
+  List<Map<String, dynamic>> orders = [];
   Future<void> fetchUsers() async {
     try {
       final response = await http.get(Uri.parse('http://10.0.2.2:5001/api/admin/users'));
@@ -37,6 +39,22 @@ class _AdminPageState extends State<AdminPage> {
     }
   }
 
+  Future<void> fetchOrders() async {
+    try {
+      final response = await http.get(Uri.parse('http://10.0.2.2:5001/api/get_all_orders'));
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        setState(() {
+          orders = List<Map<String, dynamic>>.from(data);
+          ordersLength = orders.length;
+        });
+      } else {
+        throw Exception("Failed to fetch orders");
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
+    }
+  }
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -51,6 +69,7 @@ class _AdminPageState extends State<AdminPage> {
   void initState() {
     super.initState();
     fetchUsers();
+    fetchOrders();
   }
 
   @override
@@ -70,7 +89,7 @@ class _AdminPageState extends State<AdminPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _sectionTitle("🍽️ Menu Management"),
-            _buildAdminTile(Icons.list, "View All Orders", () {}),
+            _buildAdminTile(Icons.list, "View All Orders", () {  Navigator.push(context, MaterialPageRoute(builder: (_) => const AdminAllOrdersPage()));}),
             _buildAdminTile(Icons.add_circle_outline, "Add New Food", () {
               Navigator.push(context, MaterialPageRoute(builder: (_) => const AddFoodPage()));
             }),
@@ -87,7 +106,7 @@ class _AdminPageState extends State<AdminPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildStatCard("Orders", "128", Icons.shopping_cart),
+                _buildStatCard("Orders", "$ordersLength", Icons.shopping_cart),
                 _buildStatCard("Users", "$userLength", Icons.people),
               ],
             ),

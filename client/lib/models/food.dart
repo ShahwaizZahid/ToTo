@@ -19,20 +19,22 @@ class Food {
 
   factory Food.fromJson(Map<String, dynamic> json) {
     return Food(
-      id: json['_id'] as String,
-      name: json['name'] as String,
-      description: json['description'] as String,
-      imagePath: json['imagePath'] as String,
-      price: (json['price'] as num).toDouble(),
+      id: json['_id']?.toString() ?? '',
+      name: json['name']?.toString() ?? '',
+      description: json['description']?.toString() ?? '',
+      imagePath: json['imagePath']?.toString() ?? '',
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
       availableAddons: (json['availableAddons'] as List<dynamic>?)
           ?.map((addonJson) => Addon.fromJson(addonJson))
           .toList() ??
           [],
       category: FoodCategory.values.firstWhere(
-              (e) => e.toString() == 'FoodCategory.${json['category']}',
-          orElse: () => FoodCategory.burgers),
+            (e) => e.toString() == 'FoodCategory.${json['category']}',
+        orElse: () => FoodCategory.burgers,
+      ),
     );
   }
+
 
   Map<String, dynamic> toJson() {
     return {

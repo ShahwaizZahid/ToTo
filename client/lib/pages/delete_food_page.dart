@@ -35,6 +35,7 @@ class _DeleteFoodPageState extends State<DeleteFoodPage> {
         throw Exception('Failed to load food items');
       }
     } catch (e) {
+      print(e);
       setState(() => isLoading = false);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error fetching food: $e')),

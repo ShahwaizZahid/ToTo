@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../components/my_order_food_tile.dart';
-import '../models/food.dart';
 
 class OrdersPage extends StatefulWidget {
   const OrdersPage({super.key});
