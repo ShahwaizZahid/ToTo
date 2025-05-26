@@ -1,10 +1,10 @@
 
 from bson import ObjectId
 from flask import Blueprint
-from controller.admin_restaurant import add_food
+from controller.admin_restaurant import add_food,delete_food, get_all_users, delete_user, mark_order_success
 from flask import  jsonify,request
 from flask import Blueprint, jsonify, request
-from config.db import restaurant_collection, user_collection
+from config.db import restaurant_collection, user_collection,orders_collection
 admin_restaurant_routes = Blueprint('admin_restaurant_routes', __name__)
 
 @admin_restaurant_routes.route('/api/admin/food/add', methods=['POST'])
@@ -13,72 +13,20 @@ def add_food_rote():
   
 
 @admin_restaurant_routes.route('/api/admin/food/delete/<string:food_id>', methods=['DELETE'])
-def delete_food(food_id):
-    try:
-        result = restaurant_collection.delete_one({'_id': ObjectId(food_id)})
-
-        if result.deleted_count == 1:
-            return jsonify({
-                "status": "success",
-                "message": "Food item deleted successfully."
-            }), 200
-        else:
-            return jsonify({
-                "status": "failure",
-                "message": "Food item not found."
-            }), 404
-
-    except Exception as e:
-        print(f"Error deleting food item: {e}")
-        return jsonify({
-            "status": "error",
-            "message": "Invalid ID or server error."
-        }), 500  
-
+def delete_food_route(food_id):
+    return delete_food(food_id)
 
 @admin_restaurant_routes.route('/api/admin/users', methods=['GET'])
-def get_all_users():
-    try:
-        users_cursor = user_collection.find()
-        users = []
-
-        for user in users_cursor:
-            users.append({
-                "_id": str(user.get("_id")),
-                "email": user.get("email"),
-                "password": user.get("password")
-            })
-
-        return jsonify({
-            "status": "success",
-            "users": users,
-            'length': len(users)
-        }), 200
-
-    except Exception as e:
-        return jsonify({
-            "status": "error",
-            "message": "Failed to retrieve users."
-        }), 500      
-
+def get_all_users_route():
+    return get_all_users()
 
 @admin_restaurant_routes.route('/api/admin/user/delete/<user_id>', methods=['DELETE'])
-def delete_user(user_id):
-    try:
-        result = user_collection.delete_one({'_id': ObjectId(user_id)})
+def delete_user_route(user_id):
+    return delete_user(user_id)
+    
 
-        if result.deleted_count == 1:
-            return jsonify({
-                'status': 'success',
-                'message': 'User deleted successfully.'
-            }), 200
-        else:
-            return jsonify({
-                'status': 'failure',
-                'message': 'User not found.'
-            }), 404
-    except Exception as e:
-        return jsonify({
-            'status': 'error',
-            'message': f'Error deleting user: {str(e)}'
-        }), 500
+
+@admin_restaurant_routes.route('/api/mark_order_success/<order_id>', methods=['PUT'])
+def mark_order_success_route(order_id):
+    return mark_order_success(order_id)
+    
