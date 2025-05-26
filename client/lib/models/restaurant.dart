@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
 class Restaurant extends ChangeNotifier {
-
   // ===================================
   //        Reciept Generation
   // ===================================
@@ -17,9 +16,10 @@ class Restaurant extends ChangeNotifier {
 
       final name = cartItem['name'] ?? 'Unknown';
 
-      final price = (cartItem['price'] is int)
-          ? (cartItem['price'] as int).toDouble()
-          : (cartItem['price'] ?? 0.0);
+      final price =
+          (cartItem['price'] is int)
+              ? (cartItem['price'] as int).toDouble()
+              : (cartItem['price'] ?? 0.0);
 
       final addons = cartItem['addons'] as List<dynamic>? ?? [];
 
@@ -28,16 +28,18 @@ class Restaurant extends ChangeNotifier {
       for (final addon in addons) {
         double addonPrice = 0;
         if (addon is Map && addon.containsKey('price')) {
-          addonPrice = (addon['price'] is int)
-              ? (addon['price'] as int).toDouble()
-              : (addon['price'] ?? 0.0);
+          addonPrice =
+              (addon['price'] is int)
+                  ? (addon['price'] as int).toDouble()
+                  : (addon['price'] ?? 0.0);
         }
         addonsTotalPrice += addonPrice;
       }
 
       num itemBaseTotal = quantity * price;
 
-      double itemAddonsTotal = quantity * addonsTotalPrice; // add-ons price per quantity
+      double itemAddonsTotal =
+          quantity * addonsTotalPrice; // add-ons price per quantity
 
       double itemTotalPrice = itemBaseTotal + itemAddonsTotal;
 
@@ -49,9 +51,10 @@ class Restaurant extends ChangeNotifier {
         receipt.writeln("     Add-ons:");
         for (final addon in addons) {
           final addonName = addon['name'] ?? 'Addon';
-          final addonPrice = (addon['price'] is int)
-              ? (addon['price'] as int).toDouble()
-              : (addon['price'] ?? 0.0);
+          final addonPrice =
+              (addon['price'] is int)
+                  ? (addon['price'] as int).toDouble()
+                  : (addon['price'] ?? 0.0);
           receipt.writeln("       - $addonName: ${_formatPrice(addonPrice)}");
         }
       }
@@ -67,29 +70,23 @@ class Restaurant extends ChangeNotifier {
     // Format delivery time nicely, e.g., "3:45 PM"
     final formattedDeliveryTime = DateFormat.jm().format(deliveryTime);
 
-    receipt.writeln("----------------------------------------------------------------");
+    receipt.writeln(
+      "----------------------------------------------------------------",
+    );
     receipt.writeln("Total items: $totalItems");
     receipt.writeln("Total Price: ${_formatPrice(totalPrice)}");
     receipt.writeln("Estimated Delivery Time: $formattedDeliveryTime");
-    receipt.writeln("----------------------------------------------------------------");
+    receipt.writeln(
+      "----------------------------------------------------------------",
+    );
 
     return receipt.toString();
   }
-
 
   // ===================================
   //        Price Format
   // ===================================
   String _formatPrice(double price) {
     return "\$${price.toStringAsFixed(2)}";
-  }
-
-
-  // ===================================
-  //       Addons format
-  // ===================================
-  String _formatAddons(List<dynamic> addons) {
-    // assuming each addon is a map with a 'name' key
-    return addons.map((a) => a['name']).join(', ');
   }
 }

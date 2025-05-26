@@ -34,7 +34,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
     final url = Uri.parse('http://10.0.2.2:5001/signup');
 
-
     try {
       final response = await http.post(
         url,
@@ -49,9 +48,10 @@ class _RegisterPageState extends State<RegisterPage> {
         Future.delayed(Duration(seconds: 1), () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) =>
-                LoginPage(), // dummy onTap if not needed
-          ));
+            MaterialPageRoute(
+              builder: (context) => LoginPage(), // dummy onTap if not needed
+            ),
+          );
         });
       } else {
         showMessage(data['message'] ?? 'Signup failed');
@@ -62,8 +62,11 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void showMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,26 +122,31 @@ class _RegisterPageState extends State<RegisterPage> {
                 Text(
                   'Already have an account?',
                   style: TextStyle(
-                      color: Theme.of(context).colorScheme.inversePrimary),
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                  ),
                 ),
-                const SizedBox(
-                  width: 4,
-                ),
+                const SizedBox(width: 4),
                 GestureDetector(
-                  onTap: (){Navigator.push(
+                  onTap: () {
+                    Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) =>
-                          LoginPage(), // dummy onTap if not needed
-                      ));},
+                      MaterialPageRoute(
+                        builder:
+                            (context) =>
+                                LoginPage(), // dummy onTap if not needed
+                      ),
+                    );
+                  },
                   child: Text(
                     'Login now',
                     style: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                        fontWeight: FontWeight.bold),
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),

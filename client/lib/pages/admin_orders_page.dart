@@ -23,7 +23,9 @@ class _AdminAllOrdersPageState extends State<AdminAllOrdersPage> {
   Future<void> fetchOrders() async {
     setState(() => isLoading = true);
     try {
-      final response = await http.get(Uri.parse('http://10.0.2.2:5001/api/get_all_orders'));
+      final response = await http.get(
+        Uri.parse('http://10.0.2.2:5001/api/get_all_orders'),
+      );
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
         setState(() {
@@ -35,7 +37,9 @@ class _AdminAllOrdersPageState extends State<AdminAllOrdersPage> {
       }
     } catch (e) {
       setState(() => isLoading = false);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: $e")));
     }
   }
 
@@ -46,14 +50,18 @@ class _AdminAllOrdersPageState extends State<AdminAllOrdersPage> {
     if (response.statusCode == 200) {
       fetchOrders(); // Refresh list
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Failed to update order")));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Failed to update order")));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final pendingOrders = orders.where((o) => o['orderStatus'] == 'Pending').toList();
-    final successOrders = orders.where((o) => o['orderStatus'] == 'Success').toList();
+    final pendingOrders =
+        orders.where((o) => o['orderStatus'] == 'Pending').toList();
+    final successOrders =
+        orders.where((o) => o['orderStatus'] == 'Success').toList();
 
     return DefaultTabController(
       length: 3,
@@ -68,15 +76,16 @@ class _AdminAllOrdersPageState extends State<AdminAllOrdersPage> {
             ],
           ),
         ),
-        body: isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : TabBarView(
-          children: [
-            _buildOrderList(orders),
-            _buildOrderList(pendingOrders),
-            _buildOrderList(successOrders),
-          ],
-        ),
+        body:
+            isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : TabBarView(
+                  children: [
+                    _buildOrderList(orders),
+                    _buildOrderList(pendingOrders),
+                    _buildOrderList(successOrders),
+                  ],
+                ),
       ),
     );
   }
@@ -86,14 +95,16 @@ class _AdminAllOrdersPageState extends State<AdminAllOrdersPage> {
 
     return ListView(
       padding: const EdgeInsets.all(16),
-      children: list.map((order) {
-        return MyAdminOrderTile(
-          order: order,
-          onMarkSuccess: order['orderStatus'] == 'Pending'
-              ? () => markOrderAsSuccess(order['_id'])
-              : null,
-        );
-      }).toList(),
+      children:
+          list.map((order) {
+            return MyAdminOrderTile(
+              order: order,
+              onMarkSuccess:
+                  order['orderStatus'] == 'Pending'
+                      ? () => markOrderAsSuccess(order['_id'])
+                      : null,
+            );
+          }).toList(),
     );
   }
 }

@@ -24,7 +24,9 @@ class _AdminPageState extends State<AdminPage> {
   List<Map<String, dynamic>> orders = [];
   Future<void> fetchUsers() async {
     try {
-      final response = await http.get(Uri.parse('http://10.0.2.2:5001/api/admin/users'));
+      final response = await http.get(
+        Uri.parse('http://10.0.2.2:5001/api/admin/users'),
+      );
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
@@ -41,7 +43,9 @@ class _AdminPageState extends State<AdminPage> {
 
   Future<void> fetchOrders() async {
     try {
-      final response = await http.get(Uri.parse('http://10.0.2.2:5001/api/get_all_orders'));
+      final response = await http.get(
+        Uri.parse('http://10.0.2.2:5001/api/get_all_orders'),
+      );
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
         setState(() {
@@ -52,9 +56,12 @@ class _AdminPageState extends State<AdminPage> {
         throw Exception("Failed to fetch orders");
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: $e")));
     }
   }
+
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -77,7 +84,10 @@ class _AdminPageState extends State<AdminPage> {
     final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title:  Text('Admin Panel', style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary)),
+        title: Text(
+          'Admin Panel',
+          style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
+        ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -89,17 +99,31 @@ class _AdminPageState extends State<AdminPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _sectionTitle("🍽️ Menu Management"),
-            _buildAdminTile(Icons.list, "View All Orders", () {  Navigator.push(context, MaterialPageRoute(builder: (_) => const AdminAllOrdersPage()));}),
+            _buildAdminTile(Icons.list, "View All Orders", () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const AdminAllOrdersPage()),
+              );
+            }),
             _buildAdminTile(Icons.add_circle_outline, "Add New Food", () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => const AddFoodPage()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const AddFoodPage()),
+              );
             }),
             _buildAdminTile(Icons.delete_outline, "Delete Food", () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => const DeleteFoodPage()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const DeleteFoodPage()),
+              );
             }),
             const SizedBox(height: 20),
             _sectionTitle("👥 User Management"),
             _buildAdminTile(Icons.people, "View Registered Users", () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => const RegisteredUsersPage()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const RegisteredUsersPage()),
+              );
             }),
             const SizedBox(height: 25),
             _sectionTitle("📊 Stats"),
@@ -131,7 +155,13 @@ class _AdminPageState extends State<AdminPage> {
   Widget _sectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
-      child: Text(title, style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.inversePrimary )),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Theme.of(context).colorScheme.inversePrimary,
+        ),
+      ),
     );
   }
 
@@ -142,13 +172,31 @@ class _AdminPageState extends State<AdminPage> {
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        leading: CircleAvatar(
-          backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-          child: Icon(icon, color: Theme.of(context).colorScheme.inversePrimary),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 10,
         ),
-        title: Text(title, style:  TextStyle(fontWeight: FontWeight.w600 , color: Theme.of(context).colorScheme.inversePrimary)),
-        trailing: Icon(Icons.arrow_forward_ios, size: 18, color: Theme.of(context).colorScheme.inversePrimary),
+        leading: CircleAvatar(
+          backgroundColor: Theme.of(
+            context,
+          ).colorScheme.primary.withOpacity(0.1),
+          child: Icon(
+            icon,
+            color: Theme.of(context).colorScheme.inversePrimary,
+          ),
+        ),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            color: Theme.of(context).colorScheme.inversePrimary,
+          ),
+        ),
+        trailing: Icon(
+          Icons.arrow_forward_ios,
+          size: 18,
+          color: Theme.of(context).colorScheme.inversePrimary,
+        ),
         onTap: onTap,
       ),
     );
@@ -165,9 +213,10 @@ class _AdminPageState extends State<AdminPage> {
           width: 2,
         ),
         borderRadius: BorderRadius.circular(18),
-        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 4))],
+        boxShadow: const [
+          BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 4)),
+        ],
       ),
-
 
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -176,23 +225,52 @@ class _AdminPageState extends State<AdminPage> {
           CircleAvatar(
             radius: 20,
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            child: Icon(icon, size: 24, color: Theme.of(context).colorScheme.background),
+            child: Icon(
+              icon,
+              size: 24,
+              color: Theme.of(context).colorScheme.background,
+            ),
           ),
           const SizedBox(height: 10),
-          Text(count, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.inversePrimary)),
-          Text(label, style:  TextStyle(color: Theme.of(context).colorScheme.inversePrimary)),
+          Text(
+            count,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.inversePrimary,
+            ),
+          ),
+          Text(
+            label,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.inversePrimary,
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildSettingTile({required String title, required IconData icon, required Widget trailing}) {
+  Widget _buildSettingTile({
+    required String title,
+    required IconData icon,
+    required Widget trailing,
+  }) {
     return Card(
       color: Theme.of(context).colorScheme.background,
       margin: const EdgeInsets.symmetric(vertical: 6),
       child: ListTile(
-        leading: Icon(icon, color: Theme.of(context).colorScheme.inversePrimary),
-        title: Text(title, style: TextStyle(fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.inversePrimary)),
+        leading: Icon(
+          icon,
+          color: Theme.of(context).colorScheme.inversePrimary,
+        ),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: Theme.of(context).colorScheme.inversePrimary,
+          ),
+        ),
         trailing: trailing,
       ),
     );
@@ -204,14 +282,17 @@ class _AdminPageState extends State<AdminPage> {
       elevation: 2,
       child: ListTile(
         leading: const Icon(Icons.logout, color: Colors.red),
-        title: const Text("Log Out", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
+        title: const Text(
+          "Log Out",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+        ),
         onTap: () async {
           final prefs = await SharedPreferences.getInstance();
           await prefs.setBool('adminLoggedIn', false);
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const AdminLoginPage()),
-                (route) => false,
+            (route) => false,
           );
         },
       ),

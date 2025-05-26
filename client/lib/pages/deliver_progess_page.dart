@@ -43,14 +43,21 @@ class _DeliveryProgessPageState extends State<DeliveryProgessPage> {
       final response = await http.get(
         Uri.parse('http://10.0.2.2:5001/get_cart_items?userId=$userId'),
       );
+      final resData = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
-        print('Failed to load cart items. Code: ${response.statusCode}');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(resData['message'] ?? 'error in reciept generate'),
+          ),
+        );
       }
     } catch (e) {
-      print('Error loading cart items: $e');
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error loading cart items: $e')));
     }
 
     return [];
@@ -67,17 +74,19 @@ class _DeliveryProgessPageState extends State<DeliveryProgessPage> {
 
     for (final cartItem in cartItems) {
       int quantity = (cartItem['count'] ?? 0).toInt();
-      double price = (cartItem['price'] is int)
-          ? (cartItem['price'] as int).toDouble()
-          : (cartItem['price'] ?? 0.0);
+      double price =
+          (cartItem['price'] is int)
+              ? (cartItem['price'] as int).toDouble()
+              : (cartItem['price'] ?? 0.0);
 
       final addons = cartItem['addons'] as List<dynamic>? ?? [];
 
       double addonsTotal = 0;
       for (final addon in addons) {
-        double addonPrice = (addon['price'] is int)
-            ? (addon['price'] as int).toDouble()
-            : (addon['price'] ?? 0.0);
+        double addonPrice =
+            (addon['price'] is int)
+                ? (addon['price'] as int).toDouble()
+                : (addon['price'] ?? 0.0);
         addonsTotal += addonPrice;
       }
 
@@ -85,7 +94,8 @@ class _DeliveryProgessPageState extends State<DeliveryProgessPage> {
       totalPrice += quantity * (price + addonsTotal);
     }
 
-    final deliveryTime = DateTime.now().add(Duration(minutes: 30)).toIso8601String();
+    final deliveryTime =
+        DateTime.now().add(Duration(minutes: 30)).toIso8601String();
 
     final orderData = {
       "userId": userId,
@@ -97,7 +107,7 @@ class _DeliveryProgessPageState extends State<DeliveryProgessPage> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:5001/api/orders'),
+        Uri.parse('http://10.0.2.2:5001/api/plased_order'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(orderData),
       );
@@ -112,10 +122,14 @@ class _DeliveryProgessPageState extends State<DeliveryProgessPage> {
           SnackBar(content: Text(resData['message'] ?? 'Order placed')),
         );
       } else {
-        print("Error placing order: ${resData['error']}");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(resData['message'] ?? 'Order placed error')),
+        );
       }
     } catch (e) {
-      print("Failed to place order: $e");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Failed to place order: $e")));
     }
   }
 
@@ -131,9 +145,10 @@ class _DeliveryProgessPageState extends State<DeliveryProgessPage> {
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Center(
-          child: isLoading
-              ? CircularProgressIndicator()
-              : MyReceipt(Restaurant().generateReceipt(userCart)),
+          child:
+              isLoading
+                  ? CircularProgressIndicator()
+                  : MyReceipt(Restaurant().generateReceipt(userCart)),
         ),
       ),
     );

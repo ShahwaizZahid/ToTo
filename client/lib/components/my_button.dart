@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MyButton extends StatelessWidget {
@@ -22,7 +21,7 @@ class MyButton extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Theme.of(context).colorScheme.inversePrimary,
-              fontSize: 16
+              fontSize: 16,
             ),
           ),
         ),

@@ -35,10 +35,7 @@ class _MyCartTileState extends State<MyCartTile> {
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'cart_id': cartId,
-        'method': method,
-      }),
+      body: jsonEncode({'cart_id': cartId, 'method': method}),
     );
 
     if (response.statusCode == 200) {
@@ -53,11 +50,7 @@ class _MyCartTileState extends State<MyCartTile> {
           quantity = 0;
         });
       }
-    } else {
-      // error handling here (show snackbar or something)
-      print('Failed to update quantity: ${response.body}');
     }
-
     setState(() {
       isUpdating = false;
     });
@@ -117,13 +110,15 @@ class _MyCartTileState extends State<MyCartTile> {
                     Text(
                       foodName,
                       style: TextStyle(
-                          color: Theme.of(context).colorScheme.inversePrimary),
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
                     ),
                     const SizedBox(height: 10),
                     Text(
                       '\$$price',
                       style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary),
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                     const SizedBox(height: 10),
                     MyQuantitySelector(
@@ -141,36 +136,38 @@ class _MyCartTileState extends State<MyCartTile> {
             SizedBox(
               height: 60,
               child: ListView(
-                padding:
-                const EdgeInsets.only(left: 10, bottom: 10, right: 10),
+                padding: const EdgeInsets.only(left: 10, bottom: 10, right: 10),
                 scrollDirection: Axis.horizontal,
-                children: addons.map((addon) {
-                  final name = addon['name'] ?? '';
-                  final addonPrice =
-                  (addon['price'] ?? 0).toDouble().toStringAsFixed(2);
+                children:
+                    addons.map((addon) {
+                      final name = addon['name'] ?? '';
+                      final addonPrice = (addon['price'] ?? 0)
+                          .toDouble()
+                          .toStringAsFixed(2);
 
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: FilterChip(
-                      label: Row(
-                        children: [
-                          Text(name),
-                          Text(' (\$$addonPrice)'),
-                        ],
-                      ),
-                      shape: StadiumBorder(
-                          side: BorderSide(
-                              color: Theme.of(context).colorScheme.primary)),
-                      onSelected: (value) {},
-                      backgroundColor: Theme.of(context).colorScheme.secondary,
-                      labelStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                          fontSize: 12),
-                    ),
-                  );
-                }).toList(),
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: FilterChip(
+                          label: Row(
+                            children: [Text(name), Text(' (\$$addonPrice)')],
+                          ),
+                          shape: StadiumBorder(
+                            side: BorderSide(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                          onSelected: (value) {},
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
+                          labelStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                            fontSize: 12,
+                          ),
+                        ),
+                      );
+                    }).toList(),
               ),
-            )
+            ),
         ],
       ),
     );

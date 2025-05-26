@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../models/food.dart';
@@ -21,38 +20,46 @@ class MyFoodTile extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(food.name, style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),),
-                    Text(
-                      '\$' + food.price.toString(),
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(food.description,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        food.name,
                         style: TextStyle(
-                            color:
-                                Theme.of(context).colorScheme.inversePrimary))
-                  ],
-                )),
-                SizedBox(
-                  width: 15,
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                        ),
+                      ),
+                      Text(
+                        '\$${food.price}',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        food.description,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8.0),
-            child: SizedBox(
-              width: 100,
-              height: 120,
-              child: Image.network(
-                food.imagePath,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) =>
-                    Icon(Icons.broken_image, size: 100),
-              )))
+                SizedBox(width: 15),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: SizedBox(
+                    width: 100,
+                    height: 120,
+                    child: Image.network(
+                      food.imagePath,
+                      fit: BoxFit.cover,
+                      errorBuilder:
+                          (context, error, stackTrace) =>
+                              Icon(Icons.broken_image, size: 100),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -61,7 +68,7 @@ class MyFoodTile extends StatelessWidget {
           color: Theme.of(context).colorScheme.tertiary,
           endIndent: 25,
           indent: 25,
-        )
+        ),
       ],
     );
   }

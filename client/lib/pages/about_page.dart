@@ -8,11 +8,13 @@ class AboutPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.inversePrimary),
-        title: Text("About",
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.inversePrimary,
-            )),
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.inversePrimary,
+        ),
+        title: Text(
+          "About",
+          style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
+        ),
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.background,
         elevation: 0,
@@ -22,8 +24,11 @@ class AboutPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(Icons.fastfood_rounded,
-                size: 100, color: Theme.of(context).colorScheme.primary),
+            Icon(
+              Icons.fastfood_rounded,
+              size: 100,
+              color: Theme.of(context).colorScheme.primary,
+            ),
             const SizedBox(height: 20),
             Text(
               "TOTO - Food Delivery App",
@@ -38,8 +43,9 @@ class AboutPage extends StatelessWidget {
             Text(
               "Version 1.0.0",
               style: TextStyle(
-                  fontSize: 16,
-                  color: Theme.of(context).colorScheme.primary),
+                fontSize: 16,
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
             const SizedBox(height: 30),
             Text(
@@ -52,22 +58,40 @@ class AboutPage extends StatelessWidget {
             ),
             const SizedBox(height: 30),
             ListTile(
-              leading: Icon(Icons.mail_outline,
-                  color: Theme.of(context).colorScheme.primary),
-              title: Text("support@totoapp.com",
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.inversePrimary)),
-              subtitle:  Text("Email us your feedback",style: TextStyle(
-                  color: Theme.of(context).colorScheme.inversePrimary) ),
+              leading: Icon(
+                Icons.mail_outline,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              title: Text(
+                "support@totoapp.com",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+              ),
+              subtitle: Text(
+                "Email us your feedback",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+              ),
             ),
             ListTile(
-              leading: Icon(Icons.phone_outlined,
-                  color: Theme.of(context).colorScheme.primary),
-              title: Text("+92 3086654456",
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.inversePrimary)),
-              subtitle:  Text("Customer Support",style: TextStyle(
-              color: Theme.of(context).colorScheme.inversePrimary)),
+              leading: Icon(
+                Icons.phone_outlined,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              title: Text(
+                "+92 3086654456",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+              ),
+              subtitle: Text(
+                "Customer Support",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+              ),
             ),
           ],
         ),

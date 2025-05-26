@@ -20,7 +20,13 @@ class _AddFoodPageState extends State<AddFoodPage> {
   List<TextEditingController> addonPriceControllers = [TextEditingController()];
   File? selectedImage;
 
-  final List<String> categories = ['burgers', 'sides', 'drinks', 'desserts','salads'];
+  final List<String> categories = [
+    'burgers',
+    'sides',
+    'drinks',
+    'desserts',
+    'salads',
+  ];
   String? selectedCategory;
 
   Future<void> pickImage() async {
@@ -35,14 +41,11 @@ class _AddFoodPageState extends State<AddFoodPage> {
         selectedImage = File(pickedFile.path);
       });
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('No image selected')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('No image selected')));
     }
   }
-
-
-
 
   void addAddon() {
     setState(() {
@@ -59,8 +62,6 @@ class _AddFoodPageState extends State<AddFoodPage> {
       });
     }
   }
-
-
 
   Future<void> addFood() async {
     final name = nameController.text.trim();
@@ -115,22 +116,30 @@ class _AddFoodPageState extends State<AddFoodPage> {
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${jsonDecode(response.body)['message']}')),
+          SnackBar(
+            content: Text('Error: ${jsonDecode(response.body)['message']}'),
+          ),
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to connect: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to connect: $e')));
     }
   }
 
-  Widget buildTextField(String label, TextEditingController controller,
-      {TextInputType type = TextInputType.text,
-        List<TextInputFormatter>? formatters,
-        int? maxLines,
-        int? maxLength}) {
-    final borderColor = Theme.of(context).colorScheme.inversePrimary; // 👈 Change this to your desired color
+  Widget buildTextField(
+    String label,
+    TextEditingController controller, {
+    TextInputType type = TextInputType.text,
+    List<TextInputFormatter>? formatters,
+    int? maxLines,
+    int? maxLength,
+  }) {
+    final borderColor =
+        Theme.of(
+          context,
+        ).colorScheme.inversePrimary; // 👈 Change this to your desired color
     final focusedBorderColor = Theme.of(context).colorScheme.inversePrimary;
 
     return Padding(
@@ -144,7 +153,9 @@ class _AddFoodPageState extends State<AddFoodPage> {
         style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
+          labelStyle: TextStyle(
+            color: Theme.of(context).colorScheme.inversePrimary,
+          ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide(color: borderColor),
@@ -158,15 +169,19 @@ class _AddFoodPageState extends State<AddFoodPage> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.inversePrimary),
-        title: Text('Add New Food', style: TextStyle(color: color.inversePrimary),),
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.inversePrimary,
+        ),
+        title: Text(
+          'Add New Food',
+          style: TextStyle(color: color.inversePrimary),
+        ),
         centerTitle: true,
         backgroundColor: color.background,
       ),
@@ -178,44 +193,69 @@ class _AddFoodPageState extends State<AddFoodPage> {
           children: [
             Card(
               color: color.background,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
               elevation: 3,
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
                     buildTextField('Food Name', nameController),
-                    buildTextField('Description', descController, maxLines: 3, maxLength: 70),
+                    buildTextField(
+                      'Description',
+                      descController,
+                      maxLines: 3,
+                      maxLength: 70,
+                    ),
                     buildTextField(
                       'Price',
                       priceController,
                       type: TextInputType.numberWithOptions(decimal: true),
                       formatters: [
-                        FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}'))
+                        FilteringTextInputFormatter.allow(
+                          RegExp(r'^\d*\.?\d{0,2}'),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 12),
                     DropdownButtonFormField<String>(
-
                       value: selectedCategory,
-                      items: categories.map((cat) {
-                        return DropdownMenuItem(value: cat, child: Text(cat));
-                      }).toList(),
-                      dropdownColor: Theme.of(context).colorScheme.background, // 👈 Background color of dropdown
-                      style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
-                      onChanged: (value) => setState(() => selectedCategory = value),
+                      items:
+                          categories.map((cat) {
+                            return DropdownMenuItem(
+                              value: cat,
+                              child: Text(cat),
+                            );
+                          }).toList(),
+                      dropdownColor:
+                          Theme.of(context)
+                              .colorScheme
+                              .background, // 👈 Background color of dropdown
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
+                      onChanged:
+                          (value) => setState(() => selectedCategory = value),
                       decoration: InputDecoration(
                         labelText: 'Category',
-                        labelStyle: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
+                        labelStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                        ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(color: color.inversePrimary),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: color.inversePrimary, width: 2),
+                          borderSide: BorderSide(
+                            color: color.inversePrimary,
+                            width: 2,
+                          ),
                         ),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                     ),
 
@@ -244,22 +284,37 @@ class _AddFoodPageState extends State<AddFoodPage> {
 
             const SizedBox(height: 30),
 
-            Text('Addons', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: color.primary)),
+            Text(
+              'Addons',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: color.primary,
+              ),
+            ),
 
             ...List.generate(addonNameControllers.length, (index) {
               return Card(
                 color: Theme.of(context).colorScheme.background,
                 elevation: 2,
                 margin: const EdgeInsets.symmetric(vertical: 8),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),side: BorderSide(
-                  color: color.inversePrimary, // 👈 Border color
-                  width: 1.5,               // 👈 Border width
-                ),),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: BorderSide(
+                    color: color.inversePrimary, // 👈 Border color
+                    width: 1.5, // 👈 Border width
+                  ),
+                ),
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: Row(
                     children: [
-                      Expanded(child: buildTextField('Addon Name', addonNameControllers[index])),
+                      Expanded(
+                        child: buildTextField(
+                          'Addon Name',
+                          addonNameControllers[index],
+                        ),
+                      ),
                       const SizedBox(width: 10),
                       Expanded(
                         child: buildTextField(
@@ -267,12 +322,17 @@ class _AddFoodPageState extends State<AddFoodPage> {
                           addonPriceControllers[index],
                           type: TextInputType.numberWithOptions(decimal: true),
                           formatters: [
-                            FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}'))
+                            FilteringTextInputFormatter.allow(
+                              RegExp(r'^\d*\.?\d{0,2}'),
+                            ),
                           ],
                         ),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.remove_circle, color: Colors.red),
+                        icon: const Icon(
+                          Icons.remove_circle,
+                          color: Colors.red,
+                        ),
                         onPressed: () => removeAddon(index),
                       ),
                     ],
@@ -296,20 +356,24 @@ class _AddFoodPageState extends State<AddFoodPage> {
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: addFood,
-                icon:  Icon(Icons.check_circle_outline, color: color.inversePrimary,),
-                label:  Text('Add Food', style: TextStyle(fontSize: 16, color: color.inversePrimary)),
+                icon: Icon(
+                  Icons.check_circle_outline,
+                  color: color.inversePrimary,
+                ),
+                label: Text(
+                  'Add Food',
+                  style: TextStyle(fontSize: 16, color: color.inversePrimary),
+                ),
                 style: ElevatedButton.styleFrom(
-
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   backgroundColor: color.background,
                   foregroundColor: color.onPrimary,
                   shape: RoundedRectangleBorder(
-
                     borderRadius: BorderRadius.circular(16),
-                      side: BorderSide(
-                        color: color.inversePrimary, // 👈 Border color
-                        width: 1.5,               // 👈 Border width
-                      )
+                    side: BorderSide(
+                      color: color.inversePrimary, // 👈 Border color
+                      width: 1.5, // 👈 Border width
+                    ),
                   ),
                 ),
               ),

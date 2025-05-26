@@ -48,7 +48,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const AdminPage()),
-                (route) => false,
+            (route) => false,
           );
         });
       } else {
@@ -60,8 +60,9 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   }
 
   void showMessage(String message) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -74,33 +75,41 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.admin_panel_settings,
-                  size: 100,
-                  color: Theme.of(context).colorScheme.inversePrimary),
+              Icon(
+                Icons.admin_panel_settings,
+                size: 100,
+                color: Theme.of(context).colorScheme.inversePrimary,
+              ),
               const SizedBox(height: 20),
               Text(
                 "Admin Login Panel",
                 style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.inversePrimary),
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
               ),
               const SizedBox(height: 30),
               MyTextField(
-                  controller: usernameController,
-                  hintText: "Username",
-                  obscureText: false),
+                controller: usernameController,
+                hintText: "Username",
+                obscureText: false,
+              ),
               const SizedBox(height: 12),
               MyTextField(
-                  controller: passwordController,
-                  hintText: "Password",
-                  obscureText: true),
+                controller: passwordController,
+                hintText: "Password",
+                obscureText: true,
+              ),
               const SizedBox(height: 25),
               MyButton(onTap: loginAdmin, text: "Login as Admin"),
               const SizedBox(height: 20),
-              Text("Authorized access only",
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.inversePrimary)),
+              Text(
+                "Authorized access only",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
+              ),
 
               SizedBox(height: 5),
               Row(
@@ -109,26 +118,31 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                   Text(
                     'Login as customer?',
                     style: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary),
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
                   ),
-                  const SizedBox(
-                    width: 4,
-                  ),
+                  const SizedBox(width: 4),
                   GestureDetector(
-                    onTap: (){Navigator.push(
+                    onTap: () {
+                      Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) =>
-                            LoginPage(), // dummy onTap if not needed
-                        ));},
+                        MaterialPageRoute(
+                          builder:
+                              (context) =>
+                                  LoginPage(), // dummy onTap if not needed
+                        ),
+                      );
+                    },
                     child: Text(
                       'Login now',
                       style: TextStyle(
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                          fontWeight: FontWeight.bold),
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),

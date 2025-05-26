@@ -23,55 +23,75 @@ class _RegisteredUsersPageState extends State<RegisteredUsersPage> {
 
   Future<void> fetchUsers() async {
     try {
-      final response = await http.get(Uri.parse('http://10.0.2.2:5001/api/admin/users'));
+      final response = await http.get(
+        Uri.parse('http://10.0.2.2:5001/api/admin/users'),
+      );
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = jsonDecode(response.body);
-        final List<dynamic> userList = data['users'];  // ✅ get the actual list
+        final List<dynamic> userList = data['users']; // ✅ get the actual list
         setState(() {
           users = userList.cast<Map<String, dynamic>>();
           isLoading = false;
         });
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to load users')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Failed to load users')));
       }
     } catch (e) {
       setState(() => isLoading = false);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
     }
   }
-
 
   Future<void> deleteUser(String id) async {
     final confirm = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Delete User'),
-        content: const Text('Are you sure you want to delete this user?'),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
-          TextButton(onPressed: () => Navigator.pop(context, true), child: const Text('Delete', style: TextStyle(color: Colors.red))),
-        ],
-      ),
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Delete User'),
+            content: const Text('Are you sure you want to delete this user?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: const Text(
+                  'Delete',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+            ],
+          ),
     );
 
     if (confirm != true) return;
 
     try {
-      final response = await http.delete(Uri.parse('http://10.0.2.2:5001/api/admin/user/delete/$id'));
+      final response = await http.delete(
+        Uri.parse('http://10.0.2.2:5001/api/admin/user/delete/$id'),
+      );
       final data = jsonDecode(response.body);
       if (response.statusCode == 200) {
         setState(() {
           users.removeWhere((user) => user['_id'] == id);
         });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(data['message'].toString())),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(data['message'].toString())));
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Failed to delete user')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Failed to delete user')));
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: $e')));
     }
   }
 
@@ -81,25 +101,38 @@ class _RegisteredUsersPageState extends State<RegisteredUsersPage> {
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background,
-        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.inversePrimary),
-        title:  Text('Registered Users', style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),),
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.inversePrimary,
+        ),
+        title: Text(
+          'Registered Users',
+          style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
+        ),
         centerTitle: true,
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : users.isEmpty
-          ?  Center(child: Text('No users found', style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),))
-          : ListView.builder(
-        itemCount: users.length,
-        itemBuilder: (context, index) {
-          final user = users[index];
-          return MyUserTile(
-            email: user['email'] ?? 'Unknown',
-            password: user['password'] ?? '*****',
-            onDelete: () => deleteUser(user['_id']),
-          );
-        },
-      ),
+      body:
+          isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : users.isEmpty
+              ? Center(
+                child: Text(
+                  'No users found',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                  ),
+                ),
+              )
+              : ListView.builder(
+                itemCount: users.length,
+                itemBuilder: (context, index) {
+                  final user = users[index];
+                  return MyUserTile(
+                    email: user['email'] ?? 'Unknown',
+                    password: user['password'] ?? '*****',
+                    onDelete: () => deleteUser(user['_id']),
+                  );
+                },
+              ),
     );
   }
 }

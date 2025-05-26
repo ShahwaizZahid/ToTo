@@ -48,13 +48,13 @@ class _LoginPageState extends State<LoginPage> {
         await prefs.setBool('loggedIn', true);
         await prefs.setString('email', data['email']);
         await prefs.setString('UserId', data['userId']);
-        
+
         // Navigate to home page
         Future.delayed(Duration(seconds: 1), () {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => HomePage()),
-                (Route<dynamic> route) => false, // this removes all previous routes
+            (Route<dynamic> route) => false, // this removes all previous routes
           );
         });
       } else {
@@ -66,7 +66,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void showMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -117,22 +119,27 @@ class _LoginPageState extends State<LoginPage> {
                 Text(
                   'Not a member?',
                   style: TextStyle(
-                      color: Theme.of(context).colorScheme.inversePrimary),
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                  ),
                 ),
-                const SizedBox(
-                  width: 4,
-                ),
+                const SizedBox(width: 4),
                 GestureDetector(
-                  onTap: (){Navigator.push(
+                  onTap: () {
+                    Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) =>
-                          RegisterPage(), // dummy onTap if not needed
-                      ));},
+                      MaterialPageRoute(
+                        builder:
+                            (context) =>
+                                RegisterPage(), // dummy onTap if not needed
+                      ),
+                    );
+                  },
                   child: Text(
                     'Register now',
                     style: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                        fontWeight: FontWeight.bold),
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -144,26 +151,31 @@ class _LoginPageState extends State<LoginPage> {
                 Text(
                   'Login as Admin?',
                   style: TextStyle(
-                      color: Theme.of(context).colorScheme.inversePrimary),
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                  ),
                 ),
-                const SizedBox(
-                  width: 4,
-                ),
+                const SizedBox(width: 4),
                 GestureDetector(
-                  onTap: (){Navigator.push(
+                  onTap: () {
+                    Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) =>
-                          AdminLoginPage(), // dummy onTap if not needed
-                      ));},
+                      MaterialPageRoute(
+                        builder:
+                            (context) =>
+                                AdminLoginPage(), // dummy onTap if not needed
+                      ),
+                    );
+                  },
                   child: Text(
                     'Login now',
                     style: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                        fontWeight: FontWeight.bold),
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),

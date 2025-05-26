@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class HelpPage extends StatelessWidget {
   const HelpPage({super.key});
@@ -13,8 +12,13 @@ class HelpPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: color.background,
         iconTheme: IconThemeData(color: color.inversePrimary),
-        title: Text('Help & Support',
-            style: TextStyle(color: color.inversePrimary, fontWeight: FontWeight.bold)),
+        title: Text(
+          'Help & Support',
+          style: TextStyle(
+            color: color.inversePrimary,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
       ),
       body: ListView(
@@ -25,18 +29,30 @@ class HelpPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.inversePrimary
+              color: Theme.of(context).colorScheme.inversePrimary,
             ),
           ),
           const SizedBox(height: 10),
-          _buildFAQ(context,"How do I place an order?",
-              "Browse through the menu, add items to your cart, and proceed to checkout."),
-          _buildFAQ(context,"Where can I track my delivery?",
-              "Go to the 'Delivery in Process' page to view your current order status."),
-          _buildFAQ(context,"Can I switch between light and dark mode?",
-              "Yes! Go to the settings page and toggle the theme."),
-          _buildFAQ(context,"How do I update my profile?",
-              "Currently, profile updates are not supported. Coming soon!"),
+          _buildFAQ(
+            context,
+            "How do I place an order?",
+            "Browse through the menu, add items to your cart, and proceed to checkout.",
+          ),
+          _buildFAQ(
+            context,
+            "Where can I track my delivery?",
+            "Go to the 'Delivery in Process' page to view your current order status.",
+          ),
+          _buildFAQ(
+            context,
+            "Can I switch between light and dark mode?",
+            "Yes! Go to the settings page and toggle the theme.",
+          ),
+          _buildFAQ(
+            context,
+            "How do I update my profile?",
+            "Currently, profile updates are not supported. Coming soon!",
+          ),
 
           const SizedBox(height: 30),
           Text(
@@ -51,18 +67,36 @@ class HelpPage extends StatelessWidget {
 
           ListTile(
             leading: Icon(Icons.email, color: color.primary),
-            title: Text("Email Us", style: TextStyle(color: color.inversePrimary),),
-            subtitle: Text("shahwaizmughal940@gmail.com", style: TextStyle(color: color.inversePrimary)),
+            title: Text(
+              "Email Us",
+              style: TextStyle(color: color.inversePrimary),
+            ),
+            subtitle: Text(
+              "shahwaizmughal940@gmail.com",
+              style: TextStyle(color: color.inversePrimary),
+            ),
           ),
           ListTile(
             leading: Icon(Icons.call, color: Colors.green),
-            title: Text("Call Us", style: TextStyle(color: color.inversePrimary)),
-            subtitle: Text("+92 3086654456", style: TextStyle(color: color.inversePrimary)),
+            title: Text(
+              "Call Us",
+              style: TextStyle(color: color.inversePrimary),
+            ),
+            subtitle: Text(
+              "+92 3086654456",
+              style: TextStyle(color: color.inversePrimary),
+            ),
           ),
           ListTile(
             leading: Icon(Icons.message, color: Colors.teal),
-            title: Text("Chat on WhatsApp", style: TextStyle(color: color.inversePrimary)),
-            subtitle: Text("+92 3086654456", style: TextStyle(color: color.inversePrimary)),
+            title: Text(
+              "Chat on WhatsApp",
+              style: TextStyle(color: color.inversePrimary),
+            ),
+            subtitle: Text(
+              "+92 3086654456",
+              style: TextStyle(color: color.inversePrimary),
+            ),
           ),
         ],
       ),
@@ -78,10 +112,7 @@ class HelpPage extends StatelessWidget {
         leading: Icon(Icons.help_outline, color: color),
         title: Text(
           title,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: color,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold, color: color),
         ),
         iconColor: color,
         collapsedIconColor: color,
@@ -90,16 +121,11 @@ class HelpPage extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               content,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: color,
-              ),
+              style: TextStyle(fontWeight: FontWeight.bold, color: color),
             ),
           ),
         ],
       ),
     );
   }
-
-
 }

@@ -1,6 +1,5 @@
 import 'package:client/components/my_button.dart';
 import 'package:client/pages/deliver_progess_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 
@@ -22,36 +21,40 @@ class _PaymentPageState extends State<PaymentPage> {
     if (formKey.currentState!.validate()) {
       showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Confirm payment'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: [
-                Text('Card Number: $cardNumber'),
-                Text('Expiry Date: $expiryDate'),
-                Text('Card HolderName: $cardHolderName'),
-                Text('CVV: $cvvCode'),
+        builder:
+            (context) => AlertDialog(
+              title: const Text('Confirm payment'),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: [
+                    Text('Card Number: $cardNumber'),
+                    Text('Expiry Date: $expiryDate'),
+                    Text('Card HolderName: $cardHolderName'),
+                    Text('CVV: $cvvCode'),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed:
+                      () => {
+                        Navigator.pop(context),
+                        Navigator.pop(context),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DeliveryProgessPage(),
+                          ),
+                        ),
+                      },
+                  child: const Text('Yes'),
+                ),
               ],
             ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () => {
-                Navigator.pop(context),
-                Navigator.pop(context),
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DeliveryProgessPage()))
-              },
-              child: const Text('Yes'),
-            ),
-          ],
-        ),
       );
     }
   }
@@ -87,11 +90,10 @@ class _PaymentPageState extends State<PaymentPage> {
               cvvCode = data.cvvCode;
             },
             formKey: formKey,
-
           ),
           const Spacer(),
           MyButton(onTap: () => userTappedPay(), text: 'Pay Now'),
-          const SizedBox(height: 25)
+          const SizedBox(height: 25),
         ],
       ),
     );

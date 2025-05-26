@@ -1,5 +1,3 @@
-// my_order_food_tile.dart
-
 import 'package:flutter/material.dart';
 
 class MyOrderFoodTile extends StatelessWidget {
@@ -19,16 +17,24 @@ class MyOrderFoodTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(food['name'] ?? '',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.primary)),
-                  Text("Qty: ${food['count'] ?? 1}",
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary)),
-                  Text("\$${food['price'].toString()}",
-                      style: TextStyle(color: Colors.grey[600])),
+                  Text(
+                    food['name'] ?? '',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                  Text(
+                    "Qty: ${food['count'] ?? 1}",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
+                  Text(
+                    "\$${food['price'].toString()}",
+                    style: TextStyle(color: Colors.grey[600]),
+                  ),
                 ],
               ),
             ),
@@ -41,8 +47,9 @@ class MyOrderFoodTile extends StatelessWidget {
                 width: 100,
                 height: 100,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) =>
-                const Icon(Icons.broken_image, size: 50),
+                errorBuilder:
+                    (context, error, stackTrace) =>
+                        const Icon(Icons.broken_image, size: 50),
               ),
             ),
           ],

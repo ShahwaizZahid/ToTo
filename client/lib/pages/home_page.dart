@@ -21,26 +21,28 @@ class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   List<Food> _fetchedMenu = [];
-  bool _isLoading = true;  // optional to show loading indicator
+  bool _isLoading = true; // optional to show loading indicator
 
   @override
   void initState() {
     super.initState();
-    _tabController =
-        TabController(length: FoodCategory.values.length, vsync: this);
+    _tabController = TabController(
+      length: FoodCategory.values.length,
+      vsync: this,
+    );
     fetchMenuFromApi();
   }
 
-
   void fetchMenuFromApi() async {
     try {
-      final response = await http.get(Uri.parse('http://10.0.2.2:5001/menu_list'));
+      final response = await http.get(
+        Uri.parse('http://10.0.2.2:5001/menu_list'),
+      );
 
       if (response.statusCode == 200) {
         List<dynamic> menuJson = jsonDecode(response.body);
-        print(menuJson);
-        // Parse JSON into List<Food>
-        List<Food> loadedMenu = menuJson.map((jsonItem) => Food.fromJson(jsonItem)).toList();
+        List<Food> loadedMenu =
+            menuJson.map((jsonItem) => Food.fromJson(jsonItem)).toList();
 
         setState(() {
           _fetchedMenu = loadedMenu;
@@ -58,10 +60,8 @@ class _HomePageState extends State<HomePage>
     }
   }
 
-
   @override
   void dispose() {
-    // TODO: implement dispose
     _tabController.dispose();
     super.dispose();
   }
@@ -81,8 +81,11 @@ class _HomePageState extends State<HomePage>
           final food = categoryMenu[index];
           return MyFoodTile(
             food: food,
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => FoodPage(food: food))),
+            onTap:
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => FoodPage(food: food)),
+                ),
           );
         },
       );
@@ -95,29 +98,32 @@ class _HomePageState extends State<HomePage>
       backgroundColor: Theme.of(context).colorScheme.background,
       drawer: MyDrawer(),
       body: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                MySilverAppBar(
-                  title: MyTabBar(tabController: _tabController),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Divider(
-                          indent: 25,
-                          endIndent: 25,
-                          color: Theme.of(context).colorScheme.secondary
-                      ),
-                      const MyCurrentLoaction(),
-                      const MyDescriptionBox()
-                    ],
-                  ),
+        headerSliverBuilder:
+            (context, innerBoxIsScrolled) => [
+              MySilverAppBar(
+                title: MyTabBar(tabController: _tabController),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Divider(
+                      indent: 25,
+                      endIndent: 25,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    const MyCurrentLoaction(),
+                    const MyDescriptionBox(),
+                  ],
                 ),
-              ],
-          body: _isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : TabBarView(
-            controller: _tabController,
-            children: getFoodInThisCategory(_fetchedMenu),
-          ),),
+              ),
+            ],
+        body:
+            _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : TabBarView(
+                  controller: _tabController,
+                  children: getFoodInThisCategory(_fetchedMenu),
+                ),
+      ),
     );
   }
 }

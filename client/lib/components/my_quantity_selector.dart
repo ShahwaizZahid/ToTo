@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MyQuantitySelector extends StatelessWidget {
@@ -6,12 +5,13 @@ class MyQuantitySelector extends StatelessWidget {
   final String cartId;
   final VoidCallback onIncrement;
   final VoidCallback onDecrement;
-  const MyQuantitySelector(
-      {super.key,
-      required this.quantity,
-      required this.cartId,
-      required this.onIncrement,
-      required this.onDecrement});
+  const MyQuantitySelector({
+    super.key,
+    required this.quantity,
+    required this.cartId,
+    required this.onIncrement,
+    required this.onDecrement,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class MyQuantitySelector extends StatelessWidget {
                 child: Text(
                   quantity.toString(),
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.inversePrimary
+                    color: Theme.of(context).colorScheme.inversePrimary,
                   ),
                 ),
               ),
