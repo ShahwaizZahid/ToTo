@@ -85,7 +85,6 @@ def delete_food(food_id):
             }), 404
 
     except Exception as e:
-        print(f"Error deleting food item: {e}")
         return jsonify({
             "status": "error",
             "message": "Invalid ID or server error."

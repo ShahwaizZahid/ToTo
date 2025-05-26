@@ -9,7 +9,6 @@ from pymongo.errors import ServerSelectionTimeoutError
 # ----------------------------
 def signup():
     data = request.get_json()
-    print(data)
     email = data.get('email')
     password = data.get('password')
 

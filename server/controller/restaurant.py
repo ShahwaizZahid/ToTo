@@ -18,7 +18,6 @@ def get_menu():
         return jsonify(menu_items), 200
 
     except Exception as e:
-        print(e)
         return jsonify({"error": "Failed to fetch menu", "details": str(e)}), 500
 
 
@@ -61,7 +60,6 @@ def add_to_cart():
             return jsonify({'message': 'Item added to cart successfully'}), 200
 
     except Exception as e:
-        print('Error:', e)
         return jsonify({'error': 'Failed to add item to cart'}), 500
     
 

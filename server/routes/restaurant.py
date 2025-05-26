@@ -33,7 +33,7 @@ def clear_cart_route():
     return clear_cart()
 
 
-@menu_routes.route('/api/orders', methods=['POST'])
+@menu_routes.route('/api/plased_order', methods=['POST'])
 def create_order_route():
     return create_order()
      
