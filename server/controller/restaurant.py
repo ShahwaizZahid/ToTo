@@ -5,17 +5,21 @@ import datetime
 
 
 # ----------------------------
-#    Get All menu
+#    Get All Menu 
 # ----------------------------
 def get_menu():
-    menu_items_cursor = restaurant_collection.find({})
-    menu_items = []
+    try:
+        menu_items_cursor = restaurant_collection.find({})
+        menu_items = []
 
-    for item in menu_items_cursor:
-        item['_id'] = str(item['_id'])  # Convert ObjectId to string
-        menu_items.append(item)
+        for item in menu_items_cursor:
+            item['_id'] = str(item['_id'])  # Convert ObjectId to string
+            menu_items.append(item)
+        return jsonify(menu_items), 200
 
-    return jsonify(menu_items), 200
+    except Exception as e:
+        print(e)
+        return jsonify({"error": "Failed to fetch menu", "details": str(e)}), 500
 
 
 # ----------------------------
@@ -184,7 +188,6 @@ def create_order():
 # ----------------------------
 def get_all_orders():
     try:
-        print("kl")
         orders_cursor = orders_collection.find()
         orders = []
 

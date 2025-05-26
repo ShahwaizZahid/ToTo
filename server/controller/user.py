@@ -4,6 +4,9 @@ from config.db import user_collection as collection
 from pymongo.errors import ServerSelectionTimeoutError
 
 
+# ----------------------------
+#   User Registered
+# ----------------------------
 def signup():
     data = request.get_json()
     print(data)
@@ -33,8 +36,9 @@ def signup():
         return jsonify({"status": "failure", "message": "Failed to insert.", "error": str(e)}), 500
 
 
-from bson.objectid import ObjectId  # make sure you have this imported
-
+# ----------------------------
+#    User Login
+# ----------------------------
 def login():
     data = request.get_json()
     email = data.get('email')

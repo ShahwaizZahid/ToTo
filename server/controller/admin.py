@@ -5,7 +5,9 @@ from config.db import admin_user_collection
 admin_auth_routes = Blueprint('admin_auth_routes', __name__)
 
 
-
+# ----------------------------
+#    Admin Login
+# ----------------------------
 def admin_login():
     data = request.get_json()
     email = data.get('username')
