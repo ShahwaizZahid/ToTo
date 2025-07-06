@@ -12,6 +12,9 @@ def signup():
     email = data.get('email')
     password = data.get('password')
 
+
+    print('as')
+
     # Check if all fields are provided
     if  not email or not password:
         return jsonify({"status": "failure", "message": "All fields (username, email, password) are required."}), 400

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -22,13 +23,21 @@ class _RegisteredUsersPageState extends State<RegisteredUsersPage> {
   }
 
   Future<void> fetchUsers() async {
+    final baseUrl = dotenv.env['BASE_URL'];
+    if (baseUrl == null || baseUrl.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('BASE_URL not configured')),
+      );
+      return;
+    }
+
     try {
       final response = await http.get(
-        Uri.parse('http://10.0.2.2:5001/api/admin/users'),
+        Uri.parse('$baseUrl/api/admin/users'),
       );
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = jsonDecode(response.body);
-        final List<dynamic> userList = data['users']; // ✅ get the actual list
+        final List<dynamic> userList = data['users'];
         setState(() {
           users = userList.cast<Map<String, dynamic>>();
           isLoading = false;
@@ -47,35 +56,40 @@ class _RegisteredUsersPageState extends State<RegisteredUsersPage> {
   }
 
   Future<void> deleteUser(String id) async {
+    final baseUrl = dotenv.env['BASE_URL'];
+    if (baseUrl == null || baseUrl.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('BASE_URL not configured')),
+      );
+      return;
+    }
+
     final confirm = await showDialog<bool>(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Delete User'),
-            content: const Text('Are you sure you want to delete this user?'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: const Text(
-                  'Delete',
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        title: const Text('Delete User'),
+        content: const Text('Are you sure you want to delete this user?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
           ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
     );
 
     if (confirm != true) return;
 
     try {
       final response = await http.delete(
-        Uri.parse('http://10.0.2.2:5001/api/admin/user/delete/$id'),
+        Uri.parse('$baseUrl/api/admin/user/delete/$id'),
       );
       final data = jsonDecode(response.body);
+
       if (response.statusCode == 200) {
         setState(() {
           users.removeWhere((user) => user['_id'] == id);

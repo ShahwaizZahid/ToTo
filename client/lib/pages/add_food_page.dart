@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
@@ -90,9 +91,11 @@ class _AddFoodPageState extends State<AddFoodPage> {
       );
       return;
     }
+
     // Convert image to base64
     final bytes = await selectedImage!.readAsBytes();
     final base64Image = base64Encode(bytes);
+
     // Prepare request payload
     final Map<String, dynamic> body = {
       'name': name,
@@ -103,9 +106,17 @@ class _AddFoodPageState extends State<AddFoodPage> {
       'addons': validAddons,
     };
 
+    final baseUrl = dotenv.env['BASE_URL'];
+    if (baseUrl == null || baseUrl.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('BASE_URL not configured')),
+      );
+      return;
+    }
+
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:5001/api/admin/food/add'),
+        Uri.parse('$baseUrl/api/admin/food/add'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(body),
       );
@@ -122,9 +133,9 @@ class _AddFoodPageState extends State<AddFoodPage> {
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Failed to connect: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to connect: $e')),
+      );
     }
   }
 

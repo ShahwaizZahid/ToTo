@@ -15,7 +15,7 @@ class MyAdminOrderTile extends StatelessWidget {
     List items = order['items'];
 
     return Card(
-      color: Theme.of(context).colorScheme.background,
+      color: Theme.of(context).colorScheme.inversePrimary,
       margin: const EdgeInsets.symmetric(vertical: 8),
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

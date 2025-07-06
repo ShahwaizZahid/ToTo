@@ -7,6 +7,7 @@ import 'package:client/components/my_tab_bar.dart';
 import 'package:client/models/food.dart';
 import 'package:client/pages/food_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -33,16 +34,27 @@ class _HomePageState extends State<HomePage>
     fetchMenuFromApi();
   }
 
+
+
   void fetchMenuFromApi() async {
+    final baseUrl = dotenv.env['BASE_URL'];
+
+    if (baseUrl == null || baseUrl.isEmpty) {
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
+
+    final url = Uri.parse('$baseUrl/menu_list');
+
     try {
-      final response = await http.get(
-        Uri.parse('http://10.0.2.2:5001/menu_list'),
-      );
+      final response = await http.get(url); // ← use url directly
 
       if (response.statusCode == 200) {
         List<dynamic> menuJson = jsonDecode(response.body);
         List<Food> loadedMenu =
-            menuJson.map((jsonItem) => Food.fromJson(jsonItem)).toList();
+        menuJson.map((jsonItem) => Food.fromJson(jsonItem)).toList();
 
         setState(() {
           _fetchedMenu = loadedMenu;
@@ -57,6 +69,7 @@ class _HomePageState extends State<HomePage>
       setState(() {
         _isLoading = false;
       });
+      debugPrint('Fetch menu error: $e'); // Optional: log error for debugging
     }
   }
 

@@ -6,6 +6,7 @@ import 'package:client/pages/delete_food_page.dart';
 import 'package:client/pages/registered_user_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,9 +24,15 @@ class _AdminPageState extends State<AdminPage> {
   late int ordersLength = 0;
   List<Map<String, dynamic>> orders = [];
   Future<void> fetchUsers() async {
+    final baseUrl = dotenv.env['BASE_URL'];
+    if (baseUrl == null || baseUrl.isEmpty) {
+      _showSnackBar('BASE_URL not configured');
+      return;
+    }
+
     try {
       final response = await http.get(
-        Uri.parse('http://10.0.2.2:5001/api/admin/users'),
+        Uri.parse('$baseUrl/api/admin/users'),
       );
       final data = jsonDecode(response.body);
 
@@ -42,9 +49,17 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   Future<void> fetchOrders() async {
+    final baseUrl = dotenv.env['BASE_URL'];
+    if (baseUrl == null || baseUrl.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("BASE_URL not configured")),
+      );
+      return;
+    }
+
     try {
       final response = await http.get(
-        Uri.parse('http://10.0.2.2:5001/api/get_all_orders'),
+        Uri.parse('$baseUrl/api/get_all_orders'),
       );
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
@@ -56,9 +71,9 @@ class _AdminPageState extends State<AdminPage> {
         throw Exception("Failed to fetch orders");
       }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Error: $e")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e")),
+      );
     }
   }
 

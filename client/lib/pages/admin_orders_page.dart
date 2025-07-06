@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import '../components/my_admin_order_tile.dart';
 
@@ -21,11 +22,20 @@ class _AdminAllOrdersPageState extends State<AdminAllOrdersPage> {
   }
 
   Future<void> fetchOrders() async {
+    final baseUrl = dotenv.env['BASE_URL'];
+    if (baseUrl == null || baseUrl.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("BASE_URL not configured")),
+      );
+      return;
+    }
+
     setState(() => isLoading = true);
     try {
       final response = await http.get(
-        Uri.parse('http://10.0.2.2:5001/api/get_all_orders'),
+        Uri.parse('$baseUrl/api/get_all_orders'),
       );
+
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
         setState(() {
@@ -44,9 +54,18 @@ class _AdminAllOrdersPageState extends State<AdminAllOrdersPage> {
   }
 
   Future<void> markOrderAsSuccess(String orderId) async {
+    final baseUrl = dotenv.env['BASE_URL'];
+    if (baseUrl == null || baseUrl.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("BASE_URL not configured")),
+      );
+      return;
+    }
+
     final response = await http.put(
-      Uri.parse('http://10.0.2.2:5001/api/mark_order_success/$orderId'),
+      Uri.parse('$baseUrl/api/mark_order_success/$orderId'),
     );
+
     if (response.statusCode == 200) {
       fetchOrders(); // Refresh list
     } else {

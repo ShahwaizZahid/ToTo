@@ -1,5 +1,6 @@
 import 'package:client/pages/login_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../components/my_button.dart';
 import '../components/my_textfield.dart';
 
@@ -32,7 +33,14 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
-    final url = Uri.parse('http://10.0.2.2:5001/signup');
+    final baseUrl = dotenv.env['BASE_URL'];
+    print(baseUrl);
+    if (baseUrl == null || baseUrl.isEmpty) {
+      showMessage('BASE_URL is not set in .env');
+      return;
+    }
+
+    final url = Uri.parse('$baseUrl/signup');
 
     try {
       final response = await http.post(

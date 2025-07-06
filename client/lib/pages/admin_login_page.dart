@@ -3,6 +3,7 @@ import 'package:client/components/my_button.dart';
 import 'package:client/components/my_textfield.dart';
 import 'package:client/pages/login_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -18,6 +19,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+
   Future<void> loginAdmin() async {
     final username = usernameController.text.trim();
     final password = passwordController.text.trim();
@@ -27,7 +29,13 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
       return;
     }
 
-    final url = Uri.parse('http://10.0.2.2:5001/admin/login');
+    final baseUrl = dotenv.env['BASE_URL'];
+    if (baseUrl == null || baseUrl.isEmpty) {
+      showMessage('BASE_URL not configured');
+      return;
+    }
+
+    final url = Uri.parse('$baseUrl/admin/login');
 
     try {
       final response = await http.post(
@@ -44,15 +52,16 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('adminLoggedIn', true);
         prefs.remove('userId');
+
         Future.delayed(Duration(seconds: 1), () {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const AdminPage()),
-            (route) => false,
+                (route) => false,
           );
         });
       } else {
-        showMessage(data['message']);
+        showMessage(data['message'] ?? 'Login failed');
       }
     } catch (e) {
       showMessage('Login failed: $e');

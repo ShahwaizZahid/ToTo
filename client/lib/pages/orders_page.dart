@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,6 +23,7 @@ class _OrdersPageState extends State<OrdersPage> {
     fetchOrders();
   }
 
+
   Future<void> fetchOrders() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -31,33 +33,41 @@ class _OrdersPageState extends State<OrdersPage> {
         throw Exception("User not logged in");
       }
 
-      final response = await http.get(
-        Uri.parse('http://10.0.2.2:5001/api/get_all_orders'),
-      );
+      final baseUrl = dotenv.env['BASE_URL'];
+      if (baseUrl == null || baseUrl.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("BASE_URL not configured")),
+        );
+        return;
+      }
+
+      final url = Uri.parse('$baseUrl/api/get_all_orders');
+
+      final response = await http.get(url);
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
 
         // Filter orders by userId
         final userOrders =
-            data.where((order) => order['userId'] == userId).toList();
+        data.where((order) => order['userId'] == userId).toList();
 
         setState(() {
           allOrders = List<Map<String, dynamic>>.from(userOrders);
           isLoading = false;
         });
       } else {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text("Failed to load orders")));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Failed to load orders")),
+        );
       }
     } catch (e) {
       setState(() {
         isLoading = false;
       });
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Error: $e")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e")),
+      );
     }
   }
 
