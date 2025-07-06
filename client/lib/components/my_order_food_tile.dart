@@ -28,7 +28,7 @@ class MyOrderFoodTile extends StatelessWidget {
                   Text(
                     "Qty: ${food['count'] ?? 1}",
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Theme.of(context).colorScheme.inversePrimary,
                     ),
                   ),
                   Text(
@@ -54,8 +54,6 @@ class MyOrderFoodTile extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 10),
-        Divider(color: Colors.grey[300]),
       ],
     );
   }

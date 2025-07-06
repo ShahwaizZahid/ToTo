@@ -3,6 +3,7 @@ import 'package:client/components/my_cart_tile.dart';
 import 'package:client/models/restaurant.dart';
 import 'package:client/pages/payment_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -39,12 +40,20 @@ class _CartPageState extends State<CartPage> {
     }
 
     try {
+      final baseUrl = dotenv.env['BASE_URL'];
+      if (baseUrl == null || baseUrl.isEmpty) {
+        showMessage('BASE_URL not configured');
+        return [];
+      }
       setState(() {
         isLoading = true;
       });
-      final response = await http.get(
-        Uri.parse('http://10.0.2.2:5001/get_cart_items?userId=$userId'),
-      );
+
+
+      final url = Uri.parse('$baseUrl/get_cart_items?userId=$userId');
+
+      final response = await http.get(url);
+
 
       if (response.statusCode == 200) {
         final List<dynamic> cartItems = jsonDecode(response.body);
@@ -108,11 +117,16 @@ class _CartPageState extends State<CartPage> {
                                     await SharedPreferences.getInstance();
                                 final userId = prefs.getString('UserId');
 
+                                final baseUrl = dotenv.env['BASE_URL'];
+                                if (baseUrl == null || baseUrl.isEmpty) {
+                                  showMessage('BASE_URL not configured');
+                                  return ;
+                                }
                                 if (userId != null) {
+                                  final url = Uri.parse('$baseUrl/clear_cart?userId=$userId');
+
                                   final response = await http.post(
-                                    Uri.parse(
-                                      'http://10.0.2.2:5001/clear_cart?userId=$userId',
-                                    ),
+                                    url, // ✅ use url directly, don't parse it again
                                   );
 
                                   if (response.statusCode == 200) {

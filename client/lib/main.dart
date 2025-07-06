@@ -4,6 +4,7 @@ import 'package:client/pages/home_page.dart';
 import 'package:client/pages/register_page.dart';
 import 'package:client/themes/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,7 +15,8 @@ void main() async {
   final isLoggedIn = prefs.getBool('loggedIn') ?? false;
   final isAdminLoggedIn = prefs.getBool('adminLoggedIn') ?? false;
 
-  final themeProvider = ThemeProvider(); // Will auto-load theme inside
+  final themeProvider = ThemeProvider();
+  await dotenv.load(fileName: ".env");
 
   runApp(
     MultiProvider(

@@ -4,6 +4,7 @@ import 'package:client/pages/admin_login_page.dart';
 import 'package:client/pages/home_page.dart';
 import 'package:client/pages/register_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -29,8 +30,13 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    final url = Uri.parse('http://10.0.2.2:5001/login');
+    final baseUrl = dotenv.env['BASE_URL'];
+    if (baseUrl == null || baseUrl.isEmpty) {
+      showMessage('BASE_URL is not set in .env');
+      return;
+    }
 
+    final url = Uri.parse('$baseUrl/login');
     try {
       final response = await http.post(
         url,

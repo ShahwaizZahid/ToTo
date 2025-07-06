@@ -1,6 +1,7 @@
 import 'package:client/components/my_button.dart';
 import 'package:client/models/food.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
@@ -20,6 +21,8 @@ class FoodPage extends StatefulWidget {
 }
 
 class _FoodPageState extends State<FoodPage> {
+
+
   Future<void> sendAddToCartRequest(
     String foodId,
     Map<Addon, bool> selectedAddons,
@@ -33,7 +36,13 @@ class _FoodPageState extends State<FoodPage> {
       ).showSnackBar(SnackBar(content: Text('User not logged in!')));
       return;
     }
-
+    final baseUrl = dotenv.env['BASE_URL'];
+    if (baseUrl == null || baseUrl.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('BASE_URL not configured')),
+      );
+      return;
+    }
     try {
       List<String> addons =
           selectedAddons.entries
@@ -41,8 +50,10 @@ class _FoodPageState extends State<FoodPage> {
               .map((entry) => entry.key.name)
               .toList();
 
+      final url = Uri.parse('$baseUrl/add_to_cart');
+
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:5001/add_to_cart'),
+        url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'userId': userId,

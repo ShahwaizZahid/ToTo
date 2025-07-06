@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -23,10 +24,16 @@ class _DeleteFoodPageState extends State<DeleteFoodPage> {
   }
 
   Future<void> fetchFoodItems() async {
-    try {
-      final response = await http.get(
-        Uri.parse('http://10.0.2.2:5001/menu_list'),
+    final baseUrl = dotenv.env['BASE_URL'];
+    if (baseUrl == null || baseUrl.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('BASE_URL not configured')),
       );
+      return;
+    }
+
+    try {
+      final response = await http.get(Uri.parse('$baseUrl/menu_list'));
       if (response.statusCode == 200) {
         final List data = jsonDecode(response.body);
         setState(() {
@@ -43,37 +50,43 @@ class _DeleteFoodPageState extends State<DeleteFoodPage> {
       ).showSnackBar(SnackBar(content: Text('Error fetching food: $e')));
     }
   }
-
   Future<void> deleteFood(String id) async {
+    final baseUrl = dotenv.env['BASE_URL'];
+    if (baseUrl == null || baseUrl.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('BASE_URL not configured')),
+      );
+      return;
+    }
+
     final confirm = await showDialog<bool>(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Confirm Delete'),
-            content: const Text(
-              'Are you sure you want to delete this food item?',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: const Text(
-                  'Delete',
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        title: const Text('Confirm Delete'),
+        content: const Text(
+          'Are you sure you want to delete this food item?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
           ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text(
+              'Delete',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
     );
 
     if (confirm != true) return;
 
     try {
       final response = await http.delete(
-        Uri.parse('http://10.0.2.2:5001/api/admin/food/delete/$id'),
+        Uri.parse('$baseUrl/api/admin/food/delete/$id'),
       );
 
       if (response.statusCode == 200) {

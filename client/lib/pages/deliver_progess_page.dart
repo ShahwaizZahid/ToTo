@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -39,25 +40,30 @@ class _DeliveryProgessPageState extends State<DeliveryProgessPage> {
     final userId = prefs.getString('UserId');
     if (userId == null) return [];
 
-    try {
-      final response = await http.get(
-        Uri.parse('http://10.0.2.2:5001/get_cart_items?userId=$userId'),
+    final baseUrl = dotenv.env['BASE_URL'];
+    if (baseUrl == null || baseUrl.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('BASE_URL not configured')),
       );
+      return [];
+    }
+
+    try {
+      final url = Uri.parse('$baseUrl/get_cart_items?userId=$userId');
+      final response = await http.get(url);
       final resData = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        return jsonDecode(response.body);
+        return resData;
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(resData['message'] ?? 'error in reciept generate'),
-          ),
+          SnackBar(content: Text(resData['message'] ?? 'Error loading receipt')),
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error loading cart items: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error loading cart items: $e')),
+      );
     }
 
     return [];
@@ -66,27 +72,32 @@ class _DeliveryProgessPageState extends State<DeliveryProgessPage> {
   Future<void> placeOrderToBackend(List cartItems) async {
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('UserId');
-
     if (userId == null || cartItems.isEmpty) return;
+
+    final baseUrl = dotenv.env['BASE_URL'];
+    if (baseUrl == null || baseUrl.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('BASE_URL not configured')),
+      );
+      return;
+    }
 
     int totalItems = 0;
     double totalPrice = 0;
 
     for (final cartItem in cartItems) {
       int quantity = (cartItem['count'] ?? 0).toInt();
-      double price =
-          (cartItem['price'] is int)
-              ? (cartItem['price'] as int).toDouble()
-              : (cartItem['price'] ?? 0.0);
+      double price = (cartItem['price'] is int)
+          ? (cartItem['price'] as int).toDouble()
+          : (cartItem['price'] ?? 0.0);
 
       final addons = cartItem['addons'] as List<dynamic>? ?? [];
-
       double addonsTotal = 0;
+
       for (final addon in addons) {
-        double addonPrice =
-            (addon['price'] is int)
-                ? (addon['price'] as int).toDouble()
-                : (addon['price'] ?? 0.0);
+        double addonPrice = (addon['price'] is int)
+            ? (addon['price'] as int).toDouble()
+            : (addon['price'] ?? 0.0);
         addonsTotal += addonPrice;
       }
 
@@ -95,7 +106,7 @@ class _DeliveryProgessPageState extends State<DeliveryProgessPage> {
     }
 
     final deliveryTime =
-        DateTime.now().add(Duration(minutes: 30)).toIso8601String();
+    DateTime.now().add(Duration(minutes: 30)).toIso8601String();
 
     final orderData = {
       "userId": userId,
@@ -106,8 +117,9 @@ class _DeliveryProgessPageState extends State<DeliveryProgessPage> {
     };
 
     try {
+      final url = Uri.parse('$baseUrl/api/plased_order');
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:5001/api/plased_order'),
+        url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(orderData),
       );
@@ -123,13 +135,13 @@ class _DeliveryProgessPageState extends State<DeliveryProgessPage> {
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(resData['message'] ?? 'Order placed error')),
+          SnackBar(content: Text(resData['message'] ?? 'Order failed')),
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Failed to place order: $e")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to place order: $e")),
+      );
     }
   }
 

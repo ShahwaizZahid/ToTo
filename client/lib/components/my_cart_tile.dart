@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -30,8 +31,16 @@ class _MyCartTileState extends State<MyCartTile> {
     setState(() {
       isUpdating = true;
     });
+    final baseUrl = dotenv.env['BASE_URL'];
+    if (baseUrl == null || baseUrl.isEmpty) {
+      setState(() {
+        isUpdating = false;
+      });
+      return;
+    }
 
-    final url = Uri.parse('http://10.0.2.2:5001/cart/update_count');
+    final url = Uri.parse('$baseUrl/cart/update_count');
+
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
