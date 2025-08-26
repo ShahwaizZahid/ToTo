@@ -8,18 +8,19 @@ from config.db import check_mongo_connection
 
 app = Flask(__name__)
 CORS(app)
+
+# Register blueprints
 app.register_blueprint(auth_routes) 
 app.register_blueprint(menu_routes)
 app.register_blueprint(admin_auth_routes)
 app.register_blueprint(admin_restaurant_routes)
 
-check_mongo_connection() 
-print (" Pyhton Server is running successfully")
+# Check DB connection
+check_mongo_connection()
+print("Python Server is running successfully")
 
+# Root route
 @app.route("/", methods=["GET"])
 def hello():
     return {"message": "Hello, Python!"}
 
-
-if __name__ == '__main__':
-     app.run(host="0.0.0.0", port=5001, debug=True)
