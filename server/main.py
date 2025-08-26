@@ -16,6 +16,10 @@ app.register_blueprint(admin_restaurant_routes)
 check_mongo_connection() 
 print (" Pyhton Server is running successfully")
 
+@app.route("/", methods=["GET"])
+def hello():
+    return {"message": "Hello, Python!"}
+
 
 if __name__ == '__main__':
      app.run(host="0.0.0.0", port=5001, debug=True)
